@@ -1,1 +1,1 @@
-include  ':AnimationArt', ':BezierTest', ':PathMeasureTest'
+include ':AnimationArt', ':BezierTest', ':PathMeasureTest', ':selfanimationart'
