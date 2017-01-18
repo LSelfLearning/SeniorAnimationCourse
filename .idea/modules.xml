@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/BezierTest/BezierTest.iml" filepath="$PROJECT_DIR$/BezierTest/BezierTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/PathMeasureTest/PathMeasureTest.iml" filepath="$PROJECT_DIR$/PathMeasureTest/PathMeasureTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/SeniorAnimationCourse.iml" filepath="$PROJECT_DIR$/SeniorAnimationCourse.iml" />
+      <module fileurl="file://$PROJECT_DIR$/demo/demo.iml" filepath="$PROJECT_DIR$/demo/demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/selfanimationart/selfanimationart.iml" filepath="$PROJECT_DIR$/selfanimationart/selfanimationart.iml" />
     </modules>
   </component>
