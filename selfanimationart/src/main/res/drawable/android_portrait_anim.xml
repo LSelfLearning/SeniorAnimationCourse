@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/vd_android_portrait">
+    <target
+        android:animation="@animator/leftarm"
+        android:name="leftArm"/>
+    <target
+        android:animation="@animator/rightarm"
+        android:name="rightArm"/>
+</animated-vector>
