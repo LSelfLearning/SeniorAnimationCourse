@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.LinearInterpolator;
+
 // 这个动画效果实际上并不难实现，重点是要学会动画效果的拆分，将一个复杂的动画效果，拆分成单个简单的动画
 public class AnimLoadingView extends View {
     /**

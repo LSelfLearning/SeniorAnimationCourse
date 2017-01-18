@@ -2,6 +2,7 @@ package com.lewish.start.demo.evaluator;
 
 import android.animation.TypeEvaluator;
 import android.graphics.PointF;
+
 /**
  * author: sundong
  * created at 2017/1/18 10:30

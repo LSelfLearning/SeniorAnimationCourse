@@ -78,7 +78,7 @@ public class SecondBezierView extends View {
         canvas.drawText("控制点", mFlagPointX, mFlagPointY, mPaintFlagText);
         canvas.drawLine(mStartPointX, mStartPointY, mFlagPointX, mFlagPointY, mPaintFlag);
         canvas.drawLine(mEndPointX, mEndPointY, mFlagPointX, mFlagPointY, mPaintFlag);
-
+        //画Bezier曲线
         canvas.drawPath(mPath, mPaintBezier);
     }
 

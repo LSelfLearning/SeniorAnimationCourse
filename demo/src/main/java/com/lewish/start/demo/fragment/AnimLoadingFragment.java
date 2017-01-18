@@ -17,10 +17,11 @@ import com.lewish.start.demo.view.AnimLoadingView;
 public class AnimLoadingFragment extends Fragment {
     private View mContentView;
     private AnimLoadingView mSuperLoadingProgress;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mContentView = inflater.inflate(R.layout.fragment_animloading,container,false);
+        mContentView = inflater.inflate(R.layout.fragment_animloading, container, false);
         mSuperLoadingProgress = (AnimLoadingView) mContentView.findViewById(R.id.pro);
         mContentView.findViewById(R.id.btn).setOnClickListener(new View.OnClickListener() {
             @Override

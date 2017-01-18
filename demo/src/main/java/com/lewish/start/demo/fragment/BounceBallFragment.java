@@ -24,11 +24,12 @@ public class BounceBallFragment extends Fragment {
             Color.parseColor("#ff0000"), Color.parseColor("#00ff00"),
             Color.parseColor("#0000ff"), Color.parseColor("#ffff00")
     };
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mContentView = inflater.inflate(R.layout.fragment_bounceball,container,false);
-        initView(mContentView,savedInstanceState);
+        mContentView = inflater.inflate(R.layout.fragment_bounceball, container, false);
+        initView(mContentView, savedInstanceState);
         initListener();
         return mContentView;
     }

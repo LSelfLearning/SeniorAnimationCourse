@@ -7,11 +7,11 @@
         android:id="@+id/btn_changeColor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Change Color"/>
+        android:text="Change Color" />
 
     <com.lewish.start.demo.view.BounceBallView
         android:id="@+id/loadingView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
 </RelativeLayout>

@@ -18,6 +18,7 @@ import com.lewish.start.demo.fragment.SticknessFragment;
 import com.lewish.start.demo.fragment.WaitingDotsFragment;
 import com.lewish.start.demo.fragment.WaveViewFragment;
 import com.lewish.start.demo.utils.Constants;
+
 /**
  * author: sundong
  * created at 2017/1/18 10:30

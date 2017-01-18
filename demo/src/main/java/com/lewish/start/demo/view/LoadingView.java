@@ -12,6 +12,7 @@ import android.graphics.PathMeasure;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
+
 /**
  * author: sundong
  * created at 2017/1/18 11:33

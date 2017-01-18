@@ -17,17 +17,18 @@ import com.lewish.start.demo.view.HeartBubblesView;
 public class HeartBubblesFragment extends Fragment {
     private View mContentView;
     private HeartBubblesView periscopeLayout;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mContentView = inflater.inflate(R.layout.fragment_heart_bubbles, container, false);
-        initView(mContentView,savedInstanceState);
+        initView(mContentView, savedInstanceState);
         initListener();
         return mContentView;
     }
 
     private void initView(View mContentView, Bundle savedInstanceState) {
-         periscopeLayout = (HeartBubblesView) mContentView.findViewById(R.id.periscope);
+        periscopeLayout = (HeartBubblesView) mContentView.findViewById(R.id.periscope);
     }
 
     private void initListener() {

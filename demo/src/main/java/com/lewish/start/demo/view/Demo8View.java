@@ -60,7 +60,7 @@ public class Demo8View extends FrameLayout implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         isChecked = !isChecked;
-//        mIvStar.setImageResource(isChecked ? R.drawable.ic_star_rate_on : R.drawable.ic_star_rate_off);
+        mIvStar.setImageResource(isChecked ? R.drawable.ic_star_rate_on : R.drawable.ic_star_rate_off);
         if (animatorSet != null) {
             animatorSet.cancel();
         }

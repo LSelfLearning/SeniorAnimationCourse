@@ -1,80 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:id="@+id/activity_main"
-    android:layout_width="match_parent" android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:orientation="vertical"
     tools:context="com.lewish.start.demo.activity.MainActivity">
 
-   <Button
-       android:id="@+id/btn_heart_bubbles"
-       android:text="Heart Bubbles View"
-       android:layout_width="match_parent"
-       android:layout_weight="1"
-       android:layout_height="0dp" />
+    <Button
+        android:id="@+id/btn_heart_bubbles"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="Heart Bubbles View" />
 
-   <Button
-       android:id="@+id/btn_bounceball"
-       android:text="弹力球动画"
-       android:layout_width="match_parent"
-       android:layout_weight="1"
-       android:layout_height="0dp"/>
-   <Button
-       android:id="@+id/btn_rotate3D"
-       android:text="3D旋转动画"
-       android:layout_width="match_parent"
-       android:layout_weight="1"
-       android:layout_height="0dp"/>
+    <Button
+        android:id="@+id/btn_bounceball"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="弹力球动画" />
 
-   <Button
-       android:id="@+id/btn_loadingview"
-       android:text="页面加载动画"
-       android:layout_width="match_parent"
-       android:layout_weight="1"
-       android:layout_height="0dp"/>
+    <Button
+        android:id="@+id/btn_rotate3D"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="3D旋转动画" />
 
-   <Button
-       android:id="@+id/btn_sticknessview"
-       android:text="粘性动画"
-       android:layout_width="match_parent"
-       android:layout_weight="1"
-       android:layout_height="0dp"/>
+    <Button
+        android:id="@+id/btn_loadingview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="页面加载动画" />
 
-   <Button
-       android:id="@+id/btn_waitingdots"
-       android:text="loading加载动画"
-       android:layout_width="match_parent"
-       android:layout_weight="1"
-       android:layout_height="0dp"/>
+    <Button
+        android:id="@+id/btn_sticknessview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="粘性动画" />
 
-   <Button
-       android:id="@+id/btn_waveview"
-       android:text="WaveView"
-       android:layout_width="match_parent"
-       android:layout_weight="1"
-       android:layout_height="0dp" />
+    <Button
+        android:id="@+id/btn_waitingdots"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="loading加载动画" />
 
-   <Button
-       android:id="@+id/btn_demo8"
-       android:text="Demo8"
-       android:layout_width="match_parent"
-       android:layout_weight="1"
-       android:layout_height="0dp"/>
+    <Button
+        android:id="@+id/btn_waveview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="WaveView" />
 
-   <Button
-       android:id="@+id/btn_anim_loading"
-       android:text="Loading Anim"
-       android:layout_width="match_parent"
-       android:layout_weight="1"
-       android:layout_height="0dp"/>
+    <Button
+        android:id="@+id/btn_demo8"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="Demo8" />
 
-   <Button
-       android:id="@+id/btn_searchview"
-       android:text="SearchView Anim"
-       android:layout_width="match_parent"
-       android:layout_weight="1"
-       android:layout_height="0dp"/>
+    <Button
+        android:id="@+id/btn_anim_loading"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="Loading Anim" />
+
+    <Button
+        android:id="@+id/btn_searchview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="SearchView Anim" />
 </LinearLayout>

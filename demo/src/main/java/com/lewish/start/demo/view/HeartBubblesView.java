@@ -22,6 +22,7 @@ import com.lewish.start.demo.R;
 import com.lewish.start.demo.evaluator.BezierEvaluator;
 
 import java.util.Random;
+
 /**
  * author: sundong
  * created at 2017/1/18 10:31

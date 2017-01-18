@@ -13,6 +13,7 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
+
 // 这个动画同样是考验动画效果的拆分能力，大家可以通过我在视频中介绍的方式来进行学习如果拆解动画
 public class SearchView extends View {
 

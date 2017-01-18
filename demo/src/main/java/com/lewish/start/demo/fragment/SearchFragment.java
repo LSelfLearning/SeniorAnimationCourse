@@ -19,10 +19,11 @@ public class SearchFragment extends Fragment {
     private View mContentView;
     private SearchView mSwitchView;
     private Button btnSwitch;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mContentView = inflater.inflate(R.layout.fragment_search,container,false);
+        mContentView = inflater.inflate(R.layout.fragment_search, container, false);
         mSwitchView = (SearchView) mContentView.findViewById(R.id.view_search);
         btnSwitch = (Button) mContentView.findViewById(R.id.btn_search);
         btnSwitch.setOnClickListener(new View.OnClickListener() {

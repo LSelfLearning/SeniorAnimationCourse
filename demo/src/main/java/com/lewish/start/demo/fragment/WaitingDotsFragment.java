@@ -17,10 +17,11 @@ import com.lewish.start.demo.view.WaitingDotsView;
 public class WaitingDotsFragment extends Fragment {
     private View mContentView;
     private WaitingDotsView dotsTextView;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mContentView = inflater.inflate(R.layout.fragment_waitingdots,container,false);
+        mContentView = inflater.inflate(R.layout.fragment_waitingdots, container, false);
         dotsTextView = (WaitingDotsView) mContentView.findViewById(R.id.dots);
         dotsTextView.start();
         return mContentView;

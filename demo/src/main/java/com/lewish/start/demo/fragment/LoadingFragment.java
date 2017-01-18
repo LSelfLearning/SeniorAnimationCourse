@@ -15,10 +15,11 @@ import com.lewish.start.demo.R;
  */
 public class LoadingFragment extends Fragment {
     private View mContentView;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mContentView = inflater.inflate(R.layout.fragment_loading,container,false);
+        mContentView = inflater.inflate(R.layout.fragment_loading, container, false);
         return mContentView;
     }
 }
