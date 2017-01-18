@@ -24,9 +24,10 @@ public class PathBezierView extends View implements View.OnClickListener{
     private int mMovePointX;
     private int mMovePointY;
 
-    private Path mPath;
-    private Paint mPaintPath;
-    private Paint mPaintCircle;
+    private Path  mPath;
+
+    private Paint mPathPaint;
+    private Paint mCirclePaint;
 
     public PathBezierView(Context context) {
         super(context);
@@ -35,10 +36,10 @@ public class PathBezierView extends View implements View.OnClickListener{
     public PathBezierView(Context context, AttributeSet attrs) {
         super(context, attrs);
         mPath = new Path();
-        mPaintPath = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mPaintPath.setStyle(Paint.Style.STROKE);
-        mPaintPath.setStrokeWidth(8);
-        mPaintCircle = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPathPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPathPaint.setStyle(Paint.Style.STROKE);
+        mPathPaint.setStrokeWidth(8);
+        mCirclePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
         mStartPointX = 100;
         mStartPointY = 100;
@@ -62,15 +63,14 @@ public class PathBezierView extends View implements View.OnClickListener{
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.drawCircle(mStartPointX, mStartPointY, 20, mPaintCircle);
-        canvas.drawCircle(mEndPointX, mEndPointY, 20, mPaintCircle);
-
-        canvas.drawCircle(mMovePointX, mMovePointY, 20, mPaintCircle);
+        canvas.drawCircle(mStartPointX, mStartPointY, 20, mCirclePaint);
+        canvas.drawCircle(mEndPointX, mEndPointY, 20, mCirclePaint);
+        canvas.drawCircle(mMovePointX, mMovePointY, 20, mCirclePaint);
 
         mPath.reset();
         mPath.moveTo(mStartPointX, mStartPointY);
         mPath.quadTo(mFlagPointX, mFlagPointY, mEndPointX, mEndPointY);
-        canvas.drawPath(mPath, mPaintPath);
+        canvas.drawPath(mPath, mPathPaint);
     }
 
     @Override

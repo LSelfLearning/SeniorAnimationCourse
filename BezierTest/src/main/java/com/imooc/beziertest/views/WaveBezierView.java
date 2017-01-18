@@ -25,18 +25,19 @@ public class WaveBezierView extends View implements View.OnClickListener {
 
     private Path mPath;
 
-    private Paint mPaintBezier;
-    private Paint mPaintFlag;
-    private Paint mPaintFlagText;
+    private Paint mBezierPaint;
+    private Paint mFlagPaint;
+    private Paint mFlagTextPaint;
 
-    private int mWaveLength;
     private int mScreenHeight;
     private int mScreenWidth;
-    private int mCenterY;
+
+    private int mWaveMidHeight;
+    private int mWaveLength;
     private int mWaveCount;
+    private int mOffset;
 
     private ValueAnimator mValueAnimator;
-    private int mOffset;
 
     public WaveBezierView(Context context) {
         super(context);
@@ -44,12 +45,12 @@ public class WaveBezierView extends View implements View.OnClickListener {
 
     public WaveBezierView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mPaintBezier = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mPaintBezier.setColor(Color.LTGRAY);
-        mPaintBezier.setStrokeWidth(8);
-        mPaintBezier.setStyle(Paint.Style.FILL_AND_STROKE);
+        mBezierPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mBezierPaint.setColor(Color.LTGRAY);
+        mBezierPaint.setStrokeWidth(8);
+        mBezierPaint.setStyle(Paint.Style.FILL_AND_STROKE);
 
-        mWaveLength = 800;
+        mWaveLength = 1000;
     }
 
     public WaveBezierView(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -64,7 +65,7 @@ public class WaveBezierView extends View implements View.OnClickListener {
 
         mScreenHeight = h;
         mScreenWidth = w;
-        mCenterY = h / 2;
+        mWaveMidHeight = h / 2;
 
         mWaveCount = (int) Math.round(mScreenWidth / mWaveLength + 1.5);
     }
@@ -73,15 +74,15 @@ public class WaveBezierView extends View implements View.OnClickListener {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         mPath.reset();
-        mPath.moveTo(-mWaveLength + mOffset, mCenterY);
+        mPath.moveTo(-mWaveLength + mOffset, mWaveMidHeight);
         for (int i = 0; i < mWaveCount; i++) {
-            mPath.quadTo(-mWaveLength * 3 / 4 + i * mWaveLength + mOffset, mCenterY + 60, -mWaveLength / 2 + i * mWaveLength + mOffset, mCenterY);
-            mPath.quadTo(-mWaveLength / 4 + i * mWaveLength + mOffset, mCenterY - 60, i * mWaveLength + mOffset, mCenterY);
+            mPath.quadTo(-mWaveLength * 3 / 4 + i * mWaveLength + mOffset, mWaveMidHeight + 60, -mWaveLength / 2 + i * mWaveLength + mOffset, mWaveMidHeight);
+            mPath.quadTo(-mWaveLength / 4 + i * mWaveLength + mOffset, mWaveMidHeight - 60, i * mWaveLength + mOffset, mWaveMidHeight);
         }
         mPath.lineTo(mScreenWidth, mScreenHeight);
         mPath.lineTo(0, mScreenHeight);
         mPath.close();
-        canvas.drawPath(mPath, mPaintBezier);
+        canvas.drawPath(mPath, mBezierPaint);
     }
 
     @Override
