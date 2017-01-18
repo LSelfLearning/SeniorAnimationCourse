@@ -13,12 +13,12 @@ import com.lewish.start.demo.R;
  * author: sundong
  * created at 2017/1/18 11:15
  */
-public class Rotate3DFragment extends Fragment {
+public class WaveViewFragment extends Fragment {
     private View mContentView;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mContentView = inflater.inflate(R.layout.fragment_rotate3d,container,false);
+        mContentView = inflater.inflate(R.layout.fragment_waveview,container,false);
         return mContentView;
     }
 }

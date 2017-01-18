@@ -12,7 +12,10 @@ import android.graphics.PathMeasure;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
-
+/**
+ * author: sundong
+ * created at 2017/1/18 11:33
+ */
 public class LoadingView extends View {
 
     private Paint mPaint;

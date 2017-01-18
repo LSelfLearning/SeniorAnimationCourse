@@ -11,7 +11,10 @@ import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
-
+/**
+ * author: sundong
+ * created at 2017/1/18 11:33
+ */
 public class Rotate3DView extends View {
 
     // 默认小球最大半径

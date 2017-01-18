@@ -8,10 +8,12 @@ import android.widget.FrameLayout;
 
 import com.lewish.start.demo.R;
 import com.lewish.start.demo.fragment.BounceBallFragment;
-import com.lewish.start.demo.fragment.LoadingFragment;
-import com.lewish.start.demo.fragment.SticknessFragment;
 import com.lewish.start.demo.fragment.DianZanfragment;
+import com.lewish.start.demo.fragment.LoadingFragment;
 import com.lewish.start.demo.fragment.Rotate3DFragment;
+import com.lewish.start.demo.fragment.SticknessFragment;
+import com.lewish.start.demo.fragment.WaitingDotsFragment;
+import com.lewish.start.demo.fragment.WaveViewFragment;
 import com.lewish.start.demo.utils.Constants;
 /**
  * author: sundong
@@ -47,6 +49,12 @@ public class DemoActivity extends AppCompatActivity {
                 break;
             case Constants.FRAGMENT_TYPE_STICKNESSVIEW:
                 addFragment(R.id.fl_content, new SticknessFragment());
+                break;
+            case Constants.FRAGMENT_TYPE_WAITINGDOTS:
+                addFragment(R.id.fl_content, new WaitingDotsFragment());
+                break;
+            case Constants.FRAGMENT_TYPE_WAVEVIEW:
+                addFragment(R.id.fl_content, new WaveViewFragment());
                 break;
         }
     }

@@ -18,7 +18,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     btn_bounceball,
                     btn_rotate3D,
                     btn_loadingview,
-                    btn_sticknessview;
+                    btn_sticknessview,
+                    btn_waitingdots,
+                    btn_waveview;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +35,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_rotate3D = (Button)findViewById(R.id.btn_rotate3D);
         btn_loadingview = (Button)findViewById(R.id.btn_loadingview);
         btn_sticknessview = (Button)findViewById(R.id.btn_sticknessview);
+        btn_waitingdots = (Button)findViewById(R.id.btn_waitingdots);
+        btn_waveview = (Button)findViewById(R.id.btn_waveview);
     }
 
     private void initListener() {
@@ -41,6 +45,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_rotate3D.setOnClickListener(this);
         btn_loadingview.setOnClickListener(this);
         btn_sticknessview.setOnClickListener(this);
+        btn_waitingdots.setOnClickListener(this);
+        btn_waveview.setOnClickListener(this);
     }
 
     @Override
@@ -61,6 +67,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btn_sticknessview :
                 bundle.putInt(Constants.FRAGMENT_TYPE,Constants.FRAGMENT_TYPE_STICKNESSVIEW);
+                break;
+            case R.id.btn_waitingdots :
+                bundle.putInt(Constants.FRAGMENT_TYPE,Constants.FRAGMENT_TYPE_WAITINGDOTS);
+                break;
+            case R.id.btn_waveview :
+                bundle.putInt(Constants.FRAGMENT_TYPE,Constants.FRAGMENT_TYPE_WAVEVIEW);
                 break;
         }
         openActivity(DemoActivity.class,bundle);

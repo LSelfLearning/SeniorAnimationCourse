@@ -10,9 +10,9 @@ import android.view.ViewGroup;
 import com.lewish.start.demo.R;
 
 /**
- * Created by Administrator on 2017/1/18 10:37.
+ * author: sundong
+ * created at 2017/1/18 11:15
  */
-
 public class LoadingFragment extends Fragment {
     private View mContentView;
     @Nullable
