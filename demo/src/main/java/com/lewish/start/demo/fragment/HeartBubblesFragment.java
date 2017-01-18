@@ -8,26 +8,26 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lewish.start.demo.R;
-import com.lewish.start.demo.view.DianZanView;
+import com.lewish.start.demo.view.HeartBubblesView;
 
 /**
  * author: sundong
  * created at 2017/1/18 10:30
  */
-public class DianZanfragment extends Fragment {
+public class HeartBubblesFragment extends Fragment {
     private View mContentView;
-    private DianZanView periscopeLayout;
+    private HeartBubblesView periscopeLayout;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mContentView = inflater.inflate(R.layout.fragment_dianzan, container, false);
+        mContentView = inflater.inflate(R.layout.fragment_heart_bubbles, container, false);
         initView(mContentView,savedInstanceState);
         initListener();
         return mContentView;
     }
 
     private void initView(View mContentView, Bundle savedInstanceState) {
-         periscopeLayout = (DianZanView) mContentView.findViewById(R.id.periscope);
+         periscopeLayout = (HeartBubblesView) mContentView.findViewById(R.id.periscope);
     }
 
     private void initListener() {

@@ -20,7 +20,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     btn_loadingview,
                     btn_sticknessview,
                     btn_waitingdots,
-                    btn_waveview;
+                    btn_waveview,
+                    btn_demo8,
+                    btn_demo9,
+                    btn_demo10;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,13 +33,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initView() {
-        btn_dianzan = (Button)findViewById(R.id.btn_dianzan);
+        btn_dianzan = (Button)findViewById(R.id.btn_heart_bubbles);
         btn_bounceball = (Button)findViewById(R.id.btn_bounceball);
         btn_rotate3D = (Button)findViewById(R.id.btn_rotate3D);
         btn_loadingview = (Button)findViewById(R.id.btn_loadingview);
         btn_sticknessview = (Button)findViewById(R.id.btn_sticknessview);
         btn_waitingdots = (Button)findViewById(R.id.btn_waitingdots);
         btn_waveview = (Button)findViewById(R.id.btn_waveview);
+        btn_demo8 = (Button)findViewById(R.id.btn_demo8);
+        btn_demo9 = (Button)findViewById(R.id.btn_anim_loading);
+        btn_demo10 = (Button)findViewById(R.id.btn_searchview);
     }
 
     private void initListener() {
@@ -47,14 +53,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_sticknessview.setOnClickListener(this);
         btn_waitingdots.setOnClickListener(this);
         btn_waveview.setOnClickListener(this);
+        btn_demo8.setOnClickListener(this);
+        btn_demo9.setOnClickListener(this);
+        btn_demo10.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         Bundle bundle = new Bundle();
         switch (view.getId()) {
-            case R.id.btn_dianzan :
-                 bundle.putInt(Constants.FRAGMENT_TYPE,Constants.FRAGMENT_TYPE_DIANZAN);
+            case R.id.btn_heart_bubbles:
+                 bundle.putInt(Constants.FRAGMENT_TYPE,Constants.FRAGMENT_TYPE_HEARTBUBBLESVIEW);
                 break;
             case R.id.btn_bounceball :
                  bundle.putInt(Constants.FRAGMENT_TYPE,Constants.FRAGMENT_TYPE_BOUNCEBALL);
@@ -73,6 +82,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btn_waveview :
                 bundle.putInt(Constants.FRAGMENT_TYPE,Constants.FRAGMENT_TYPE_WAVEVIEW);
+                break;
+            case R.id.btn_demo8 :
+                bundle.putInt(Constants.FRAGMENT_TYPE,Constants.FRAGMENT_TYPE_DEMO8);
+                break;
+            case R.id.btn_anim_loading:
+                bundle.putInt(Constants.FRAGMENT_TYPE,Constants.FRAGMENT_TYPE_ANIMLOADING);
+                break;
+            case R.id.btn_searchview:
+                bundle.putInt(Constants.FRAGMENT_TYPE,Constants.FRAGMENT_TYPE_SEARCHVIEW);
                 break;
         }
         openActivity(DemoActivity.class,bundle);

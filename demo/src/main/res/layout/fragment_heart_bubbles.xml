@@ -4,7 +4,7 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
-    <com.lewish.start.demo.view.DianZanView
+    <com.lewish.start.demo.view.HeartBubblesView
         android:id="@+id/periscope"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

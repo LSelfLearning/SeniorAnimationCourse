@@ -26,7 +26,7 @@ import java.util.Random;
  * author: sundong
  * created at 2017/1/18 10:31
  */
-public class DianZanView extends RelativeLayout {
+public class HeartBubblesView extends RelativeLayout {
 
     // 设置不同的插值器，让物体变化的速率具有更大的随机性
     private Interpolator line = new LinearInterpolator();//线性
@@ -42,17 +42,17 @@ public class DianZanView extends RelativeLayout {
     private int dHeight;
     private int dWidth;
 
-    public DianZanView(Context context) {
+    public HeartBubblesView(Context context) {
         super(context);
         init();
     }
 
-    public DianZanView(Context context, AttributeSet attrs) {
+    public HeartBubblesView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public DianZanView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public HeartBubblesView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }

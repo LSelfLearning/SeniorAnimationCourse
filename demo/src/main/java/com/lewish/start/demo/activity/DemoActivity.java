@@ -8,7 +8,10 @@ import android.widget.FrameLayout;
 
 import com.lewish.start.demo.R;
 import com.lewish.start.demo.fragment.BounceBallFragment;
-import com.lewish.start.demo.fragment.DianZanfragment;
+import com.lewish.start.demo.fragment.SearchFragment;
+import com.lewish.start.demo.fragment.Demo8Fragment;
+import com.lewish.start.demo.fragment.AnimLoadingFragment;
+import com.lewish.start.demo.fragment.HeartBubblesFragment;
 import com.lewish.start.demo.fragment.LoadingFragment;
 import com.lewish.start.demo.fragment.Rotate3DFragment;
 import com.lewish.start.demo.fragment.SticknessFragment;
@@ -35,8 +38,8 @@ public class DemoActivity extends AppCompatActivity {
 
     private void loadData() {
         switch (mFragmentType) {
-            case Constants.FRAGMENT_TYPE_DIANZAN:
-                addFragment(R.id.fl_content, new DianZanfragment());
+            case Constants.FRAGMENT_TYPE_HEARTBUBBLESVIEW:
+                addFragment(R.id.fl_content, new HeartBubblesFragment());
                 break;
             case Constants.FRAGMENT_TYPE_BOUNCEBALL:
                 addFragment(R.id.fl_content, new BounceBallFragment());
@@ -55,6 +58,15 @@ public class DemoActivity extends AppCompatActivity {
                 break;
             case Constants.FRAGMENT_TYPE_WAVEVIEW:
                 addFragment(R.id.fl_content, new WaveViewFragment());
+                break;
+            case Constants.FRAGMENT_TYPE_DEMO8:
+                addFragment(R.id.fl_content, new Demo8Fragment());
+                break;
+            case Constants.FRAGMENT_TYPE_ANIMLOADING:
+                addFragment(R.id.fl_content, new AnimLoadingFragment());
+                break;
+            case Constants.FRAGMENT_TYPE_SEARCHVIEW:
+                addFragment(R.id.fl_content, new SearchFragment());
                 break;
         }
     }
