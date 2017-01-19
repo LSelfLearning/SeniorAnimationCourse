@@ -157,4 +157,11 @@ public class ImageWaveView extends View implements View.OnClickListener {
         });
         mOffsetYValueAnimator.start();
     }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        mOffsetXValueAnimator.cancel();
+        mOffsetYValueAnimator.cancel();
+        super.onDetachedFromWindow();
+    }
 }
