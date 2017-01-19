@@ -19,6 +19,7 @@
         android:id="@+id/ivStar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_star_rate_off"/>
+        android:src="@drawable/ic_star_rate_off"
+        />
 
 </merge>
