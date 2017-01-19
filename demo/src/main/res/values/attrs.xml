@@ -5,4 +5,8 @@
         <attr name="jumpHeight" format="integer" />
         <attr name="autoplay" format="boolean" />
     </declare-styleable>
+    <declare-styleable name="ImageWaveView">
+        <attr name="imageSrc" format="reference"/>
+        <attr name="fillColor" format="color"/>
+    </declare-styleable>
 </resources>

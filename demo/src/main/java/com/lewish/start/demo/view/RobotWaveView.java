@@ -27,7 +27,7 @@ public class RobotWaveView extends View {
     // 源图片
     private Bitmap mSrcBitmap;
     // 控件宽高
-    private int width, height;
+    private int mViewWidth, mViewHeight;
     // 画贝塞尔曲线Path
     private Path mBezierPath;
     // 在该画布上绘制目标图片
@@ -77,13 +77,13 @@ public class RobotWaveView extends View {
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.parseColor("#ffc9394a"));
         // 获得资源文件
-        mSrcBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+        mSrcBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_star_rate_off);
         // 设置宽高为图片的宽高
-        width = mSrcBitmap.getWidth();
-        height = mSrcBitmap.getHeight();
+        mViewWidth = mSrcBitmap.getWidth();
+        mViewHeight = mSrcBitmap.getHeight();
         // 初始状态值
-        mWaveHeight = 7 / 8F * height;
-        controlY = 17 / 16F * height;
+        mWaveHeight = 7 / 8F * mViewHeight;
+        controlY = 17 / 16F * mViewHeight;
         // 初始化Xfermode
         porterDuffXfermode = new PorterDuffXfermode(PorterDuff.Mode.SRC_IN);
         // 初始化path
@@ -91,7 +91,7 @@ public class RobotWaveView extends View {
         // 初始化画布
         mCanvas = new Canvas();
         // 创建bitmap
-        mDstBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        mDstBitmap = Bitmap.createBitmap(mViewWidth, mViewHeight, Bitmap.Config.ARGB_8888);
         // 将新建的bitmap注入画布
         mCanvas.setBitmap(mDstBitmap);
     }
@@ -111,11 +111,11 @@ public class RobotWaveView extends View {
         // 擦除像素
         mDstBitmap.eraseColor(Color.parseColor("#00ffffff"));
         // 当控制点的x坐标大于或等于终点x坐标时更改标识值
-        if (controlX >= width + 1 / 2 * width) {
+        if (controlX >= mViewWidth + 1 / 2 * mViewWidth) {
             isIncrease = false;
         }
         // 当控制点的x坐标小于或等于起点x坐标时更改标识值
-        else if (controlX <= -1 / 2 * width) {
+        else if (controlX <= -1 / 2 * mViewWidth) {
             isIncrease = true;
         }
         // 根据标识值判断当前的控制点x坐标是该加还是减
@@ -126,17 +126,17 @@ public class RobotWaveView extends View {
             mWaveHeight -= 1;
         } else {
             // 超出则重置位置
-            mWaveHeight = 7 / 8F * height;
-            controlY = 17 / 16F * height;
+            mWaveHeight = 7 / 8F * mViewHeight;
+            controlY = 17 / 16F * mViewHeight;
         }
         // 贝塞尔曲线的生成
         mBezierPath.moveTo(0, mWaveHeight);
         // 两个控制点通过controlX，controlY生成
         mBezierPath.cubicTo(controlX / 2, mWaveHeight - (controlY - mWaveHeight),
-                (controlX + width) / 2, controlY, width, mWaveHeight);
+                (controlX + mViewWidth) / 2, controlY, mViewWidth, mWaveHeight);
         // 与下下边界闭合
-        mBezierPath.lineTo(width, height);
-        mBezierPath.lineTo(0, height);
+        mBezierPath.lineTo(mViewWidth, mViewHeight);
+        mBezierPath.lineTo(0, mViewHeight);
         // 进行闭合
         mBezierPath.close();
         // 画慕课网logo
@@ -163,7 +163,7 @@ public class RobotWaveView extends View {
             width = widthSize;
         } else {
             // 宽度加左右内边距
-            width = this.width + getPaddingLeft() + getPaddingRight();
+            width = this.mViewWidth + getPaddingLeft() + getPaddingRight();
             if (widthMode == MeasureSpec.AT_MOST) {
                 // 取小的那个
                 width = Math.min(width, widthSize);
@@ -174,7 +174,7 @@ public class RobotWaveView extends View {
             height = heightSize;
         } else {
             // 高度加左右内边距
-            height = this.height + getPaddingTop() + getPaddingBottom();
+            height = this.mViewHeight + getPaddingTop() + getPaddingBottom();
             if (heightMode == MeasureSpec.AT_MOST) {
                 // 取小的那个
                 height = Math.min(height, heightSize);

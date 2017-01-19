@@ -2,13 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center"
     android:orientation="vertical">
 
-    <com.lewish.start.demo.view.RobotWaveView
+    <com.lewish.start.demo.view.ImageWaveView
         android:id="@+id/cv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="20dp" />
+        app:imageSrc="@drawable/ic_star_rate_off"/>
 
 </LinearLayout>
