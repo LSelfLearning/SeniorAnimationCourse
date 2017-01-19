@@ -4,7 +4,10 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-
+/**
+ * author: sundong
+ * created at 2017/1/19 11:49
+ */
 public class MainActivity extends AppCompatActivity {
 
     @Override

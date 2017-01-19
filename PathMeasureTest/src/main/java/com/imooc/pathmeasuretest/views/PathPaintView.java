@@ -11,7 +11,10 @@ import android.graphics.PathMeasure;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
-
+/**
+ * author: sundong
+ * created at 2017/1/19 11:48
+ */
 public class PathPaintView extends View {
 
     private Path mPath;

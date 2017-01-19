@@ -9,7 +9,10 @@ import android.graphics.PathMeasure;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
-
+/**
+ * author: sundong
+ * created at 2017/1/19 11:49
+ */
 public class PathTracingView extends View {
 
     private Path mDst;

@@ -9,10 +9,14 @@ import android.graphics.PathMeasure;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
-
+/**
+ * author: sundong
+ * created at 2017/1/19 11:48
+ */
 public class PathPosTanView extends View  implements View.OnClickListener{
 
     private Path mPath;
+    private Path mDstPath;
     private float[] mPos;
     private float[] mTan;
     private Paint mPaint;
@@ -26,6 +30,7 @@ public class PathPosTanView extends View  implements View.OnClickListener{
 
     public PathPosTanView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        mDstPath = new Path();
         mPath = new Path();
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setStyle(Paint.Style.STROKE);
@@ -45,6 +50,7 @@ public class PathPosTanView extends View  implements View.OnClickListener{
         mAnimator.setDuration(3000);
         mAnimator.setInterpolator(new LinearInterpolator());
         mAnimator.setRepeatCount(ValueAnimator.INFINITE);
+        mAnimator.setRepeatMode(ValueAnimator.RESTART);
         mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
@@ -61,16 +67,20 @@ public class PathPosTanView extends View  implements View.OnClickListener{
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        mPathMeasure.getPosTan(mCurrentValue * mPathMeasure.getLength(), mPos, mTan);
-        float degree = (float) (Math.atan2(mTan[1], mTan[0]) * 180 / Math.PI);
+        mDstPath.reset();
+        mDstPath.lineTo(0, 0);
+        float distance = mCurrentValue * mPathMeasure.getLength();
+        mPathMeasure.getPosTan(distance, mPos, mTan);
+//        float degree = (float) (Math.atan2(mTan[1], mTan[0]) * 180 / Math.PI);
+        mPathMeasure.getSegment(0,distance,mDstPath,true);
 
-        canvas.save();
+//        canvas.save();
         canvas.translate(400, 400);
-        canvas.drawPath(mPath, mPaint);
+        canvas.drawPath(mDstPath, mPaint);
         canvas.drawCircle(mPos[0], mPos[1], 10, mPaint);
-        canvas.rotate(degree);
-        canvas.drawLine(0, -200, 300, -200, mPaint);
-        canvas.restore();
+//        canvas.rotate(degree);
+//        canvas.drawLine(0, -200, 300, -200, mPaint);
+//        canvas.restore();
     }
 
     @Override
