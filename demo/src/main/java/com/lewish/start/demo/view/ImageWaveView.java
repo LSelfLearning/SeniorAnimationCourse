@@ -17,10 +17,7 @@ import android.view.View;
 import android.view.animation.LinearInterpolator;
 
 import com.lewish.start.demo.R;
-/**
- * author: sundong
- * created at 2017/1/19 17:11
- */
+
 public class ImageWaveView extends View implements View.OnClickListener {
     private  Bitmap mDstBitmap;
     private PorterDuffXfermode mPorterDuffXfermode;
@@ -71,6 +68,8 @@ public class ImageWaveView extends View implements View.OnClickListener {
             mSrcBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_star_rate_off);
         }
         mSrcBitmap = imageSrc.getBitmap();
+
+
         // 设置宽高为图片的宽高
         mViewWidth = mSrcBitmap.getWidth();
         mViewHeight = mSrcBitmap.getHeight();
@@ -81,6 +80,7 @@ public class ImageWaveView extends View implements View.OnClickListener {
 
         // 初始化Xfermode
         mPorterDuffXfermode = new PorterDuffXfermode(PorterDuff.Mode.SRC_IN);
+
         // 初始化画布
         mCanvas = new Canvas();
         // 创建bitmap
@@ -95,7 +95,7 @@ public class ImageWaveView extends View implements View.OnClickListener {
         mBezierPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mBezierPaint.setDither(true);
         mBezierPaint.setStyle(Paint.Style.FILL);
-        mBezierPaint.setColor(mFillColor);
+        mBezierPaint.setColor(Color.parseColor("#ffc9394a"));
     }
 
     private void drawTargetBitmap() {
@@ -115,7 +115,7 @@ public class ImageWaveView extends View implements View.OnClickListener {
         mCanvas.drawBitmap(mSrcBitmap, 0, 0, mBezierPaint);
         // 设置Xfermode
         mBezierPaint.setXfermode(mPorterDuffXfermode);
-        // 画二阶贝塞尔曲线
+        // 画三阶贝塞尔曲线
         mCanvas.drawPath(mBezierPath, mBezierPaint);
         // 重置Xfermode
         mBezierPaint.setXfermode(null);
