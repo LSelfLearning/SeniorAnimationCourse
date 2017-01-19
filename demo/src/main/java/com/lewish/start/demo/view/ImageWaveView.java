@@ -19,7 +19,8 @@ import android.view.animation.LinearInterpolator;
 import com.lewish.start.demo.R;
 
 public class ImageWaveView extends View implements View.OnClickListener {
-    public static final int DEFAULTFILLCOLOR = Color.RED; //默认填充色
+    public static final int DEFAULT_FILLCOLOR = Color.RED; //默认填充色
+    public static final int DEFAULT_DRAWABLE_RES = R.drawable.ic_star_rate_off;
 
     private Bitmap mDstBitmap;
     private PorterDuffXfermode mPorterDuffXfermode;
@@ -61,9 +62,9 @@ public class ImageWaveView extends View implements View.OnClickListener {
         TypedArray mTypedArray = context.obtainStyledAttributes(attrs,
                 R.styleable.ImageWaveView);
         BitmapDrawable imageSrc = (BitmapDrawable) mTypedArray.getDrawable(R.styleable.ImageWaveView_imageSrc);
-        mFillColor = mTypedArray.getColor(R.styleable.ImageWaveView_fillColor,Color.RED);
+        mFillColor = mTypedArray.getColor(R.styleable.ImageWaveView_fillColor,DEFAULT_FILLCOLOR);
         if(imageSrc==null) {
-            mSrcBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_star_rate_off);
+            mSrcBitmap = BitmapFactory.decodeResource(getResources(), DEFAULT_DRAWABLE_RES);
         }
         mSrcBitmap = imageSrc.getBitmap();
         // 设置宽高为图片的宽高
