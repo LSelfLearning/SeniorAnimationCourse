@@ -19,19 +19,21 @@ import android.view.animation.LinearInterpolator;
 import com.lewish.start.demo.R;
 
 public class ImageWaveView extends View implements View.OnClickListener {
-    private  Bitmap mDstBitmap;
+    public static final int DEFAULTFILLCOLOR = Color.RED; //默认填充色
+
+    private Bitmap mDstBitmap;
     private PorterDuffXfermode mPorterDuffXfermode;
     private Bitmap mSrcBitmap;
     private Canvas mCanvas;
     private int mFillColor;
-    private Path mBezierPath;
 
+    private Path  mBezierPath;
     private Paint mBezierPaint;
 
     private int mViewHeight;
     private int mViewWidth;
 
-    private int mWaveMidHeight;
+    private int mWaveHeightPosY;
     private int mWaveHalfRange;
     private int mWaveLength;
     private int mWaveCount;
@@ -56,10 +58,6 @@ public class ImageWaveView extends View implements View.OnClickListener {
     }
 
     private void initView(Context context,AttributeSet attrs) {
-        initPaint();
-
-        mBezierPath = new Path();
-
         TypedArray mTypedArray = context.obtainStyledAttributes(attrs,
                 R.styleable.ImageWaveView);
         BitmapDrawable imageSrc = (BitmapDrawable) mTypedArray.getDrawable(R.styleable.ImageWaveView_imageSrc);
@@ -68,19 +66,18 @@ public class ImageWaveView extends View implements View.OnClickListener {
             mSrcBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_star_rate_off);
         }
         mSrcBitmap = imageSrc.getBitmap();
-
-
         // 设置宽高为图片的宽高
         mViewWidth = mSrcBitmap.getWidth();
         mViewHeight = mSrcBitmap.getHeight();
-        mWaveMidHeight = (int) (7 / 8F * mViewHeight);
+        mWaveHeightPosY = (int) (7 / 8F * mViewHeight);
         mWaveLength = (int) (mViewWidth*0.8);
         mWaveCount = (int) Math.round(mViewWidth / mWaveLength + 1.5);
         mWaveHalfRange = (int) (mViewHeight*0.1);
 
         // 初始化Xfermode
         mPorterDuffXfermode = new PorterDuffXfermode(PorterDuff.Mode.SRC_IN);
-
+        //初始化Path
+        mBezierPath = new Path();
         // 初始化画布
         mCanvas = new Canvas();
         // 创建bitmap
@@ -89,23 +86,21 @@ public class ImageWaveView extends View implements View.OnClickListener {
         mCanvas.setBitmap(mDstBitmap);
         // 擦除像素
         mDstBitmap.eraseColor(Color.parseColor("#00ffffff"));
-    }
-
-    private void initPaint() {
+        //初始化画笔
         mBezierPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mBezierPaint.setDither(true);
         mBezierPaint.setStyle(Paint.Style.FILL);
-        mBezierPaint.setColor(Color.parseColor("#ffc9394a"));
+        mBezierPaint.setColor(mFillColor);
     }
 
     private void drawTargetBitmap() {
         // 重置path
         mBezierPath.reset();
         // 贝塞尔曲线的生成
-        mBezierPath.moveTo(-mWaveLength + mWaveOffsetX, mWaveMidHeight);
+        mBezierPath.moveTo(-mWaveLength + mWaveOffsetX, mWaveHeightPosY);
         for (int i = 0; i < mWaveCount; i++) {
-            mBezierPath.quadTo(-mWaveLength * 3 / 4 + i * mWaveLength + mWaveOffsetX, mWaveMidHeight + mWaveHalfRange, -mWaveLength / 2 + i * mWaveLength + mWaveOffsetX, mWaveMidHeight);
-            mBezierPath.quadTo(-mWaveLength / 4 + i * mWaveLength + mWaveOffsetX, mWaveMidHeight - mWaveHalfRange, i * mWaveLength + mWaveOffsetX, mWaveMidHeight);
+            mBezierPath.quadTo(-mWaveLength * 3 / 4 + i * mWaveLength + mWaveOffsetX, mWaveHeightPosY + mWaveHalfRange, -mWaveLength / 2 + i * mWaveLength + mWaveOffsetX, mWaveHeightPosY);
+            mBezierPath.quadTo(-mWaveLength / 4 + i * mWaveLength + mWaveOffsetX, mWaveHeightPosY - mWaveHalfRange, i * mWaveLength + mWaveOffsetX, mWaveHeightPosY);
         }
         mBezierPath.lineTo(mViewWidth, mViewHeight);
         mBezierPath.lineTo(0, mViewHeight);
@@ -136,7 +131,7 @@ public class ImageWaveView extends View implements View.OnClickListener {
 
     private void startAnimation() {
         mOffsetXValueAnimator = ValueAnimator.ofInt(0, mWaveLength);
-        mOffsetXValueAnimator.setDuration(1000);
+        mOffsetXValueAnimator.setDuration(2000);
         mOffsetXValueAnimator.setRepeatCount(ValueAnimator.INFINITE);
         mOffsetXValueAnimator.setInterpolator(new LinearInterpolator());
         mOffsetXValueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -155,7 +150,7 @@ public class ImageWaveView extends View implements View.OnClickListener {
         mOffsetYValueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                mWaveMidHeight = (int) valueAnimator.getAnimatedValue();
+                mWaveHeightPosY = (int) valueAnimator.getAnimatedValue();
                 invalidate();
             }
         });
