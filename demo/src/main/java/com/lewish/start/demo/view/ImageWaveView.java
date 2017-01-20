@@ -133,7 +133,7 @@ public class ImageWaveView extends View implements View.OnClickListener {
 
     private void startAnimation() {
         mOffsetXValueAnimator = ValueAnimator.ofInt(0, mWaveLength);
-        mOffsetXValueAnimator.setDuration(2000);
+        mOffsetXValueAnimator.setDuration(700);
         mOffsetXValueAnimator.setRepeatCount(ValueAnimator.INFINITE);
         mOffsetXValueAnimator.setInterpolator(new LinearInterpolator());
         mOffsetXValueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -146,7 +146,7 @@ public class ImageWaveView extends View implements View.OnClickListener {
         mOffsetXValueAnimator.start();
 
         mOffsetYValueAnimator = ValueAnimator.ofInt(mViewHeight,0);
-        mOffsetYValueAnimator.setDuration(3000);
+        mOffsetYValueAnimator.setDuration(2000);
         mOffsetYValueAnimator.setRepeatCount(ValueAnimator.INFINITE);
         mOffsetYValueAnimator.setInterpolator(new LinearInterpolator());
         mOffsetYValueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -160,13 +160,16 @@ public class ImageWaveView extends View implements View.OnClickListener {
     }
 
     private void stopAnimation(){
-        mOffsetXValueAnimator.cancel();
-        mOffsetYValueAnimator.cancel();
+        if(mOffsetXValueAnimator!=null) {
+            mOffsetXValueAnimator.cancel();
+        }
+        if(mOffsetYValueAnimator!=null) {
+            mOffsetYValueAnimator.cancel();
+        }
     }
     @Override
     protected void onDetachedFromWindow() {
-        mOffsetXValueAnimator.cancel();
-        mOffsetYValueAnimator.cancel();
+        stopAnimation();
         super.onDetachedFromWindow();
     }
     @Override
