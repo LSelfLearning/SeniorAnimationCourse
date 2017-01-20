@@ -23,7 +23,12 @@ public class WaitingDotsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mContentView = inflater.inflate(R.layout.fragment_waitingdots, container, false);
         dotsTextView = (WaitingDotsView) mContentView.findViewById(R.id.dots);
-        dotsTextView.start();
         return mContentView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        dotsTextView.start();
     }
 }

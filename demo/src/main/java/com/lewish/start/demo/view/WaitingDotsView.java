@@ -49,10 +49,10 @@ public class WaitingDotsView extends AppCompatTextView {
         new Handler(Looper.getMainLooper());
         //自定义属性
         if (attrs != null) {
-            TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.WaitingDots);
-            period = typedArray.getInt(R.styleable.WaitingDots_period, 6000);
-            jumpHeight = typedArray.getInt(R.styleable.WaitingDots_jumpHeight, (int) (getTextSize() / 4));
-            autoPlay = typedArray.getBoolean(R.styleable.WaitingDots_autoplay, true);
+            TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.WaitingDotsView);
+            period = typedArray.getInt(R.styleable.WaitingDotsView_period, 6000);
+            jumpHeight = typedArray.getInt(R.styleable.WaitingDotsView_jumpHeight, (int) (getTextSize() / 4));
+            autoPlay = typedArray.getBoolean(R.styleable.WaitingDotsView_autoplay, true);
             typedArray.recycle();
         }
         dotOne = new JumpingSpan();

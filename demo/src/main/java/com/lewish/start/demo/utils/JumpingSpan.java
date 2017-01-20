@@ -3,7 +3,10 @@ package com.lewish.start.demo.utils;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.text.style.ReplacementSpan;
-
+/**
+ * author: sundong
+ * created at 2017/1/20 15:03
+ */
 public class JumpingSpan extends ReplacementSpan {
 
     @Override

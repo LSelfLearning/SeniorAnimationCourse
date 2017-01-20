@@ -106,23 +106,27 @@ public class HeartBubblesView extends RelativeLayout {
 
     /**
      * 动画生成器，包含两个部分，一个是进入的动画，另一个是移动的动画
-     *
      * @param target
      * @return
      */
     private Animator getAnimator(View target) {
         // 进入动画
-        AnimatorSet set = getEnterAnimtor(target);
+        AnimatorSet enterSet = getEnterAnimtor(target);
         // 移动动画
         ValueAnimator bezierValueAnimator = getBezierValueAnimator(target);
         AnimatorSet finalSet = new AnimatorSet();
-        finalSet.playSequentially(set);
-        finalSet.playSequentially(set, bezierValueAnimator);
+        finalSet.playSequentially(enterSet);
+        finalSet.playSequentially(enterSet, bezierValueAnimator);
         finalSet.setInterpolator(interpolators[random.nextInt(4)]);
         finalSet.setTarget(target);
         return finalSet;
     }
 
+    /**
+     * 进入时的动画-->透明+放大
+     * @param target
+     * @return
+     */
     private AnimatorSet getEnterAnimtor(final View target) {
         // 进入动画就是一个透明的+放大的动画
         ObjectAnimator alpha = ObjectAnimator.ofFloat(target, View.ALPHA, 0.2f, 1f);
@@ -148,8 +152,7 @@ public class HeartBubblesView extends RelativeLayout {
     }
 
     /**
-     * 获取中间的两个点
-     *
+     * 随机获取中间的两个控制点
      * @param scale
      */
     private PointF getPointF(int scale) {

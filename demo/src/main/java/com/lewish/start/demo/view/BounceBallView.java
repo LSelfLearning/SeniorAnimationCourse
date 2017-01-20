@@ -15,7 +15,6 @@ import android.view.animation.AccelerateInterpolator;
  * created at 2017/1/18 10:31
  */
 public class BounceBallView extends View {
-
     // 画笔
     private Paint mPaint;
     // 颜色
@@ -25,7 +24,7 @@ public class BounceBallView extends View {
     private float density;
     private RectF rectF;
     // 起点、终点、当前点
-    private int startY, startX, endY, currentY;
+    private int startX, startY, endY, currentY;
 
     public BounceBallView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -54,6 +53,10 @@ public class BounceBallView extends View {
     private void playAnimator() {
         // 我们只需要取Y轴方向上的变化即可
         ValueAnimator valueAnimator = ValueAnimator.ofInt(startY, endY);
+        valueAnimator.setInterpolator(new AccelerateInterpolator(1.2f));
+        valueAnimator.setRepeatCount(ValueAnimator.INFINITE);
+        valueAnimator.setRepeatMode(ValueAnimator.REVERSE);
+        valueAnimator.setDuration(500);
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -61,23 +64,18 @@ public class BounceBallView extends View {
                 invalidate();
             }
         });
-        valueAnimator.setInterpolator(new AccelerateInterpolator(1.2f));
-        valueAnimator.setRepeatCount(-1);
-        valueAnimator.setRepeatMode(ValueAnimator.REVERSE);
-        valueAnimator.setDuration(500);
         valueAnimator.start();
     }
 
     /**
      * 绘制圆形
-     *
      * @param canvas
      */
     private void drawCircle(Canvas canvas) {
         // 当接触到底部时候，我们为了要描绘一种压扁的效果，实际上就是绘制椭圆
-        if (endY - currentY > 10) {
+        if (endY - currentY > 10) { //未接近底部时
             canvas.drawCircle(startX, currentY, radius * density, mPaint);
-        } else {
+        } else { //接近底部时
             rectF = new RectF(startX - radius * density - 2, currentY - radius * density + 5,
                     startX + radius * density + 2, currentY + radius * density);
             canvas.drawOval(rectF, mPaint);

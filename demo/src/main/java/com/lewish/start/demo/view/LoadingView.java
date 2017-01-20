@@ -18,10 +18,16 @@ import android.view.animation.DecelerateInterpolator;
  * created at 2017/1/18 11:33
  */
 public class LoadingView extends View {
-
     private Paint mPaint;
-    private int mPointCount = 6, mPointRadius = 25, mTranslateX, mTranslateY, mWidth, mHeight, mCenterY;
-    private float mFraction = 0, mPathLength;
+    private int mPointCount = 6,
+            mPointRadius = 25,
+            mTranslateX,
+            mTranslateY,
+            mWidth,
+            mHeight,
+            mCenterY;
+    private float mFraction = 0,
+            mPathLength;
     private ValueAnimator mAnimator;
     private boolean mThroughAbove = true;
     private PathMeasure mPathMeasure;
@@ -29,11 +35,15 @@ public class LoadingView extends View {
     private float[] mPos = new float[2];// set position
 
     public LoadingView(Context context) {
-        super(context);
+        this(context, null);
     }
 
     public LoadingView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        initView();
+    }
+
+    private void initView() {
         mPaint = new Paint();
         mPaint.setStyle(Paint.Style.FILL);
         int pointColor = Color.BLACK;
@@ -68,7 +78,7 @@ public class LoadingView extends View {
         int height = MeasureSpec.getSize(heightMeasureSpec);
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
-        mWidth = (3 * mPointCount + 1) * mPointRadius;// gap == radius
+        mWidth = (3 * mPointCount + 1) * mPointRadius;// gap == radius 注：前后各半个
         mHeight = mPointRadius * 2 * 10;// 3 circle height
         if (widthMode != MeasureSpec.AT_MOST && heightMode != MeasureSpec.AT_MOST) {
             if (width < mWidth)
@@ -84,9 +94,10 @@ public class LoadingView extends View {
         }
         mTranslateX = width / 2 - mWidth / 2;
         mTranslateY = height / 2 - mHeight / 2;
+
         mCenterY = mHeight / 2;
         mPath.moveTo(mPointRadius * 2, mCenterY);
-        mPath.cubicTo(mPointRadius * 2, mCenterY, mWidth / 2, 0, mWidth - mPointRadius * 2, mCenterY);
+        mPath.quadTo(mWidth / 2, 0, mWidth - mPointRadius * 2, mCenterY);
         mPathMeasure.setPath(mPath, false);
         mPathLength = mPathMeasure.getLength();
         setMeasuredDimension(width, height);

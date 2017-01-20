@@ -12,6 +12,7 @@ import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.drawable.BitmapDrawable;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
@@ -158,10 +159,35 @@ public class ImageWaveView extends View implements View.OnClickListener {
         mOffsetYValueAnimator.start();
     }
 
+    private void stopAnimation(){
+        mOffsetXValueAnimator.cancel();
+        mOffsetYValueAnimator.cancel();
+    }
     @Override
     protected void onDetachedFromWindow() {
         mOffsetXValueAnimator.cancel();
         mOffsetYValueAnimator.cancel();
         super.onDetachedFromWindow();
+    }
+    @Override
+    public void setVisibility(int v) {
+        if (getVisibility() != v) {
+            super.setVisibility(v);
+            if (v == GONE || v == INVISIBLE) {
+                stopAnimation();
+            } else {
+                startAnimation();
+            }
+        }
+    }
+
+    @Override
+    protected void onVisibilityChanged(@NonNull View changedView, int v) {
+        super.onVisibilityChanged(changedView, v);
+        if (v == GONE || v == INVISIBLE) {
+            stopAnimation();
+        } else {
+            startAnimation();
+        }
     }
 }
