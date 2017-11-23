@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.1"
+    buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "com.imooc.animationart"
         minSdkVersion 14
@@ -17,12 +17,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    productFlavors {
-        myFlavor {
-            minSdkVersion 21
-            targetSdkVersion 21
-        }
-    }
+//    productFlavors {
+//        myFlavor {
+//            minSdkVersion 21
+//            targetSdkVersion 21
+//        }
+//    }
 }
 
 dependencies {
