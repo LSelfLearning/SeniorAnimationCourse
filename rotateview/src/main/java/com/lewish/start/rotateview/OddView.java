@@ -13,6 +13,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 
+import java.util.List;
+
 /**
  * author: sundong
  * created at 2017/11/23 20:29
@@ -36,7 +38,7 @@ public class OddView extends View {
     private int scaleNum;
     private float scaleMaxLength;
     private int[] amountArr = {500, 1000, 1500, 2000, 2500};
-
+    private List amountList;
     private Context mContext;
     private Paint mPaint;
     private Paint mAreaPaint;
@@ -160,10 +162,12 @@ public class OddView extends View {
         mScalePath.moveTo(middleStartPointX, realHeight);
         mScalePath.quadTo(middleControlPointX, realHeight / 2, middleStartPointX, 0);
         mScalePathMeasure.setPath(mScalePath, false);
+
         if (mIsCW) {
-            int a = (int) ((1+initOffset) / (1f / scaleNum));
+            int a = (int) ((1 + initOffset) / (1f / scaleNum));
             for (int i = 0; i < a; i++) {
-                float distance = mScalePathMeasure.getLength() * (1f/ scaleNum * (i + 1)-initOffset);
+                float distance = mScalePathMeasure.getLength() * ((1f / scaleNum) * (i + 1) + initOffset);
+
                 mScalePathMeasure.getPosTan(distance, mScalePos, null);
                 mScalePathMeasure.getSegment(0, distance, mScalePath, true);
                 mScalePaint.setColor(i == scaleNum - 2 ? selectedColor : scaleColor);
@@ -172,7 +176,8 @@ public class OddView extends View {
         } else {
             int b = (int) ((1 - initOffset) / (1f / scaleNum));
             for (int i = 0; i < b; i++) {
-                float distance = mScalePathMeasure.getLength() * (initOffset + 1f / scaleNum * (i + 1));
+                float distance = mScalePathMeasure.getLength() * ((1f / scaleNum) * (i + 1) + initOffset);
+
                 mScalePathMeasure.getPosTan(distance, mScalePos, null);
                 mScalePathMeasure.getSegment(0, distance, mScalePath, true);
                 mScalePaint.setColor(i == scaleNum - 2 ? selectedColor : scaleColor);
