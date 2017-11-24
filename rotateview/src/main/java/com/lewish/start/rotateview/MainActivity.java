@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.mBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mOddView.setProgress(1f,5000);
+                mOddView.setProgress(1f,10000);
             }
         });
 

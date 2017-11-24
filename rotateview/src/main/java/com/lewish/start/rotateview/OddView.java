@@ -166,28 +166,45 @@ public class OddView extends View {
         mScalePathMeasure.setPath(mScalePath, false);
         float perPercent = 1f / (scaleNum - 1);//每一段所占屏幕百分比
         if (mIsCW) {
-            int a = (int) (2)*scaleNum;
+            int a = (int) (1) * scaleNum;
             for (int i = 0; i < a; i++) {
 
                 float perDistance = mScalePathMeasure.getLength() * perPercent;
-                float moveDistance = mScalePathMeasure.getLength() * initOffset;
-                float linePos = perDistance*(scaleNum-i);
-                float movingPos = linePos+moveDistance;
-
+                float moveDistance = perDistance * initOffset;
+                float linePos = perDistance * i;
+                float movingPos = linePos + moveDistance;
                 mScalePathMeasure.getPosTan(movingPos, mScalePos, null);
                 mScalePathMeasure.getSegment(0, movingPos, mScalePath, true);
 
-                mScalePaint.setColor(i%2==0?Color.GREEN:Color.RED);
+                mScalePaint.setColor(i % 2 == 0 ? Color.GREEN : Color.RED);
+                canvas.drawLine(mScalePos[0], mScalePos[1], mScalePos[0] - 40, mScalePos[1], mScalePaint);
 
-                canvas.drawLine(mScalePos[0],mScalePos[1],mScalePos[0]-40,mScalePos[1],mScalePaint);
+                if(moveDistance>=perDistance) {
+                    canvas.drawLine(middleStartPointX, realHeight,  middleStartPointX- 40,realHeight, mScalePaint);
+
+                }
 
 
+
+//                float linePos = perDistance * i;
+//                float movingPos = linePos + moveDistance;
+//
+//                mScalePathMeasure.getPosTan(movingPos, mScalePos, null);
+//                mScalePathMeasure.getSegment(0, movingPos, mScalePath, true);
+//
+//                mScalePaint.setColor(i % 2 == 0 ? Color.GREEN : Color.RED);
+//
+//                canvas.drawLine(mScalePos[0], mScalePos[1], mScalePos[0] - 40, mScalePos[1], mScalePaint);
+//
+//
                 StringBuilder sb = new StringBuilder("onDraw:");
-
+//
                 sb.append("i").append(" = ").append(i).append("\n");
                 sb.append("linePos").append(" = ").append(linePos).append("\n");
-                sb.append("mScalePos").append(" = ").append(mScalePos).append("\n");
-                sb.append("mScalePath").append(" = ").append(mScalePath).append("\n");
+                sb.append("mScalePos[0]").append(" = ").append(mScalePos[0]).append("\n");
+                sb.append("mScalePos[1]").append(" = ").append(mScalePos[1]).append("\n");
+                sb.append("middleStartPointX").append(" = ").append(middleStartPointX).append("\n");
+                sb.append("realHeight").append(" = ").append(realHeight).append("\n");
 
                 Log.d(TAG, sb.toString());
 
@@ -203,15 +220,15 @@ public class OddView extends View {
             for (int i = 0; i < b; i++) {
                 float perDistance = mScalePathMeasure.getLength() * perPercent;
                 float moveDistance = mScalePathMeasure.getLength() * initOffset;
-                float linePos = perDistance*i;
-                float movingPos = linePos+moveDistance;
+                float linePos = perDistance * i;
+                float movingPos = linePos + moveDistance;
 
                 mScalePathMeasure.getPosTan(movingPos, mScalePos, null);
                 mScalePathMeasure.getSegment(0, movingPos, mScalePath, true);
 
-                mScalePaint.setColor(i%2==0?Color.GREEN:Color.RED);
+                mScalePaint.setColor(i % 2 == 0 ? Color.GREEN : Color.RED);
 
-                canvas.drawLine(mScalePos[0],mScalePos[1],mScalePos[0]-40,mScalePos[1],mScalePaint);
+                canvas.drawLine(mScalePos[0], mScalePos[1], mScalePos[0] - 40, mScalePos[1], mScalePaint);
 
             }
         }
@@ -270,10 +287,12 @@ public class OddView extends View {
      * @param progress 0~100
      */
     public void setProgress(float progress, int time) {
-        mIsCW = progress>0;
+        mIsCW = progress > 0;
         mAnimator = ValueAnimator.ofFloat(0, progress);
         mAnimator.setDuration(time);
         mAnimator.setInterpolator(new LinearInterpolator());
+        mAnimator.setRepeatCount(ValueAnimator.INFINITE);
+//        mAnimator.setRepeatMode(ValueAnimator.RESTART);
         mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
