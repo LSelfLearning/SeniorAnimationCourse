@@ -10,7 +10,6 @@ import android.graphics.Path;
 import android.graphics.PathMeasure;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 
@@ -165,112 +164,44 @@ public class OddView extends View {
         mScalePath.quadTo(middleControlPointX, realHeight / 2, middleStartPointX, 0);
         mScalePathMeasure.setPath(mScalePath, false);
         float perPercent = 1f / (scaleNum - 1);//每一段所占屏幕百分比
+        float perDistance = mScalePathMeasure.getLength() * perPercent;
+        float moveDistance = mScalePathMeasure.getLength() * initOffset;
+        int lineCount = scaleNum * 2;
         if (mIsCW) {
-            int a = (int) (2)*scaleNum;
-            for (int i = 0; i < a; i++) {
-
-                float perDistance = mScalePathMeasure.getLength() * perPercent;
-                float moveDistance = mScalePathMeasure.getLength() * initOffset;
-                float linePos = perDistance*(scaleNum-i);
-                float movingPos = linePos+moveDistance;
+            for (int i = 0; i < lineCount; i++) {
+                float linePos = perDistance * (scaleNum - i);
+                float movingPos = linePos + moveDistance;
 
                 mScalePathMeasure.getPosTan(movingPos, mScalePos, null);
                 mScalePathMeasure.getSegment(0, movingPos, mScalePath, true);
 
-                mScalePaint.setColor(i%2==0?Color.GREEN:Color.RED);
+                mScalePaint.setColor(i % 2 == 0 ? Color.GREEN : Color.RED);
 
-                canvas.drawLine(mScalePos[0],mScalePos[1],mScalePos[0]-40,mScalePos[1],mScalePaint);
+                float lineLength = i % 2 == 0 ? scaleMaxLength : scaleMaxLength / 2;
+                canvas.drawLine(mScalePos[0], mScalePos[1], mScalePos[0] - lineLength, mScalePos[1], mScalePaint);
 
-
-                StringBuilder sb = new StringBuilder("onDraw:");
-
-                sb.append("i").append(" = ").append(i).append("\n");
-                sb.append("linePos").append(" = ").append(linePos).append("\n");
-                sb.append("mScalePos").append(" = ").append(mScalePos).append("\n");
-                sb.append("mScalePath").append(" = ").append(mScalePath).append("\n");
-
-                Log.d(TAG, sb.toString());
-
-//                float distance = mScalePathMeasure.getLength() * (perPercent * (i + 1) + initOffset);
-//
-//                mScalePathMeasure.getPosTan(distance, mScalePos, null);
-//                mScalePathMeasure.getSegment(0, distance, mScalePath, true);
-//                mScalePaint.setColor(i == scaleNum - 2 ? selectedColor : scaleColor);
-//                canvas.drawLine(mScalePos[0], mScalePos[1], mScalePos[0] - (i % 2 != 0 ? scaleMaxLength : scaleMaxLength / 2), mScalePos[1], mScalePaint);
             }
         } else {
-            int b = (int) ((2) * scaleNum);
-            for (int i = 0; i < b; i++) {
-                float perDistance = mScalePathMeasure.getLength() * perPercent;
-                float moveDistance = mScalePathMeasure.getLength() * initOffset;
-                float linePos = perDistance*i;
-                float movingPos = linePos+moveDistance;
+            for (int i = 0; i < lineCount; i++) {
+                float linePos = perDistance * i;
+                float movingPos = linePos + moveDistance;
 
                 mScalePathMeasure.getPosTan(movingPos, mScalePos, null);
                 mScalePathMeasure.getSegment(0, movingPos, mScalePath, true);
 
-                mScalePaint.setColor(i%2==0?Color.GREEN:Color.RED);
+                mScalePaint.setColor(i % 2 == 0 ? Color.GREEN : Color.RED);
 
-                canvas.drawLine(mScalePos[0],mScalePos[1],mScalePos[0]-40,mScalePos[1],mScalePaint);
-
+                float lineLength = i % 2 == 0 ? scaleMaxLength : scaleMaxLength / 2;
+                canvas.drawLine(mScalePos[0], mScalePos[1], mScalePos[0] - lineLength, mScalePos[1], mScalePaint);
             }
         }
-//        for (int j = 0; j < scaleNum; j++) {
-//            float distance = mScalePathMeasure.getLength() * (initOffset + 1f / scaleNum * (j + 1));
-//            mScalePathMeasure.getPosTan(distance, mScalePos, null);
-//            mScalePathMeasure.getSegment(0, distance, mScalePath, true);
-//            mScalePaint.setColor(j == scaleNum - 2 ? selectedColor : scaleColor);
-//            canvas.drawLine(mScalePos[0], mScalePos[1], mScalePos[0] - (j % 2 != 0 ? scaleMaxLength : scaleMaxLength / 2), mScalePos[1], mScalePaint);
-//        }
-
-//        canvas.drawPath(mLeftArcPath,mPaint);
-//        for (int i = 0; i < 3; i++) {
-//            mPaint.setColor(Color.BLACK);
-//            int shlValue = i == 2 ? 250 : 200;
-//            int pointX = realWidth - 50 - shlValue * i;
-//            int pointY = realHeight;
-//            int endPointY = 0;
-//            int FlagPointX = realWidth - 250 - shlValue * i;
-//            int FlagPointY = realHeight / 2;
-//            mRightArcPath.moveTo(pointX, pointY);
-//            mRightArcPath.quadTo(FlagPointX, FlagPointY, pointX, endPointY);
-//            mRightArcPath.lineTo(realWidth, 0);
-//            mRightArcPath.lineTo(realWidth, realHeight);
-//            mRightArcPath.lineTo(pointX, pointY);
-//            mRightArcPath.close();
-//            canvas.drawPath(mRightArcPath, mPaint);
-//            if (i == 1) {
-//                //画刻度
-//                mScalePath.moveTo(pointX, pointY);
-//                mScalePath.quadTo(FlagPointX, FlagPointY, pointX, endPointY);
-//                mScalePathMeasure.setPath(mScalePath, false);
-//                for (int j = 0; j < 10; j++) {
-//                    float distance = mScalePathMeasure.getLength() * 0.1f * (j + 1);
-//                    mScalePathMeasure.getPosTan(distance, mScalePos, mScaleTan);
-//                    mScalePathMeasure.getSegment(0, distance, mScalePath, true);
-//                    canvas.drawLine(mScalePos[0], mScalePos[1], mScalePos[0] - (j % 2 == 0 ? 40 : 20), mScalePos[1], mPaint);
-//                }
-//                //画数字
-//                mNumPath.moveTo(pointX-100, pointY);
-//                mNumPath.quadTo(FlagPointX-100, FlagPointY, pointX-100, endPointY);
-//                mNumPathMeasure.setPath(mNumPath, false);
-//                for (int k = 0;k<5;k++){
-//                    float distance = mNumPathMeasure.getLength() * 0.2f * (k + 1);
-//                    mNumPathMeasure.getPosTan(distance,mNumPos,mNumTan);
-//                    mNumPathMeasure.getSegment(0,distance,mNumPath,true);
-//                    mPaint.setTextSize(40);
-//                    canvas.drawText(500*(k+1)+"",mNumPos[0]-100,mNumPos[1]+20,mPaint);
-//                }
-//            }
-//        }
-
     }
 
     /**
      * @param progress 0~100
      */
     public void setProgress(float progress, int time) {
-        mIsCW = progress>0;
+        mIsCW = progress > 0;
         mAnimator = ValueAnimator.ofFloat(0, progress);
         mAnimator.setDuration(time);
         mAnimator.setInterpolator(new LinearInterpolator());
