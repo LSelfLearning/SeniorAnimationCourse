@@ -10,6 +10,7 @@ import android.graphics.Path;
 import android.graphics.PathMeasure;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 
@@ -21,13 +22,14 @@ import java.util.List;
  */
 
 public class OddView extends View {
+    private static final String TAG = "OddView";
     private static final String DEFAULT_RIGHTAREA_COLOR = "#4f4f4f";
     private static final String DEFAULT_MIDDLEAREA_COLOR = "#555555";
     private static final String DEFAULT_LEFTAREA_COLOR = "#4a4a4a";
     private static final String DEFAULT_SCALE_COLOR = "#525252";
     private static final String DEFAULT_SELECTED_COLOR = "#ffd401";
     private static final float DEFAULT_SCALE_MAX_LENGTH = 40;
-    private static final int DEFAULT_SCALE_NUM = 9;
+    private static final int DEFAULT_SCALE_NUM = 10;
 
     private int rightAreaColor;
     private int middleAreaColor;
@@ -35,7 +37,7 @@ public class OddView extends View {
     private int scaleColor;
     private int selectedColor;
 
-    private int scaleNum;
+    private int scaleNum;//一屏有多少刻度
     private float scaleMaxLength;
     private int[] amountArr = {500, 1000, 1500, 2000, 2500};
     private List amountList;
@@ -122,7 +124,7 @@ public class OddView extends View {
         int rightArcOffset = -50;
         int middleArcOffset = -150;
         int leftArcOffset = -200;
-        //画最里边的
+        //画最右边的
         int rightStartPointX = realWidth + rightArcOffset;
         int rightControlPointX = realWidth + controlPointOffset;
         mRightArcPath.moveTo(rightStartPointX, realHeight);
@@ -157,31 +159,60 @@ public class OddView extends View {
         canvas.drawPath(mLeftArcPath, mAreaPaint);
         //画刻度
         float initOffset = mProgress;
-        mIsCW = initOffset > 0;
+
 
         mScalePath.moveTo(middleStartPointX, realHeight);
         mScalePath.quadTo(middleControlPointX, realHeight / 2, middleStartPointX, 0);
         mScalePathMeasure.setPath(mScalePath, false);
-
+        float perPercent = 1f / (scaleNum - 1);//每一段所占屏幕百分比
         if (mIsCW) {
-            int a = (int) ((1 + initOffset) / (1f / scaleNum));
+            int a = (int) (2)*scaleNum;
             for (int i = 0; i < a; i++) {
-                float distance = mScalePathMeasure.getLength() * ((1f / scaleNum) * (i + 1) + initOffset);
 
-                mScalePathMeasure.getPosTan(distance, mScalePos, null);
-                mScalePathMeasure.getSegment(0, distance, mScalePath, true);
-                mScalePaint.setColor(i == scaleNum - 2 ? selectedColor : scaleColor);
-                canvas.drawLine(mScalePos[0], mScalePos[1], mScalePos[0] - (i % 2 != 0 ? scaleMaxLength : scaleMaxLength / 2), mScalePos[1], mScalePaint);
+                float perDistance = mScalePathMeasure.getLength() * perPercent;
+                float moveDistance = mScalePathMeasure.getLength() * initOffset;
+                float linePos = perDistance*(scaleNum-i);
+                float movingPos = linePos+moveDistance;
+
+                mScalePathMeasure.getPosTan(movingPos, mScalePos, null);
+                mScalePathMeasure.getSegment(0, movingPos, mScalePath, true);
+
+                mScalePaint.setColor(i%2==0?Color.GREEN:Color.RED);
+
+                canvas.drawLine(mScalePos[0],mScalePos[1],mScalePos[0]-40,mScalePos[1],mScalePaint);
+
+
+                StringBuilder sb = new StringBuilder("onDraw:");
+
+                sb.append("i").append(" = ").append(i).append("\n");
+                sb.append("linePos").append(" = ").append(linePos).append("\n");
+                sb.append("mScalePos").append(" = ").append(mScalePos).append("\n");
+                sb.append("mScalePath").append(" = ").append(mScalePath).append("\n");
+
+                Log.d(TAG, sb.toString());
+
+//                float distance = mScalePathMeasure.getLength() * (perPercent * (i + 1) + initOffset);
+//
+//                mScalePathMeasure.getPosTan(distance, mScalePos, null);
+//                mScalePathMeasure.getSegment(0, distance, mScalePath, true);
+//                mScalePaint.setColor(i == scaleNum - 2 ? selectedColor : scaleColor);
+//                canvas.drawLine(mScalePos[0], mScalePos[1], mScalePos[0] - (i % 2 != 0 ? scaleMaxLength : scaleMaxLength / 2), mScalePos[1], mScalePaint);
             }
         } else {
-            int b = (int) ((1 - initOffset) / (1f / scaleNum));
+            int b = (int) ((2) * scaleNum);
             for (int i = 0; i < b; i++) {
-                float distance = mScalePathMeasure.getLength() * ((1f / scaleNum) * (i + 1) + initOffset);
+                float perDistance = mScalePathMeasure.getLength() * perPercent;
+                float moveDistance = mScalePathMeasure.getLength() * initOffset;
+                float linePos = perDistance*i;
+                float movingPos = linePos+moveDistance;
 
-                mScalePathMeasure.getPosTan(distance, mScalePos, null);
-                mScalePathMeasure.getSegment(0, distance, mScalePath, true);
-                mScalePaint.setColor(i == scaleNum - 2 ? selectedColor : scaleColor);
-                canvas.drawLine(mScalePos[0], mScalePos[1], mScalePos[0] - (i % 2 != 0 ? scaleMaxLength : scaleMaxLength / 2), mScalePos[1], mScalePaint);
+                mScalePathMeasure.getPosTan(movingPos, mScalePos, null);
+                mScalePathMeasure.getSegment(0, movingPos, mScalePath, true);
+
+                mScalePaint.setColor(i%2==0?Color.GREEN:Color.RED);
+
+                canvas.drawLine(mScalePos[0],mScalePos[1],mScalePos[0]-40,mScalePos[1],mScalePaint);
+
             }
         }
 //        for (int j = 0; j < scaleNum; j++) {
@@ -239,6 +270,7 @@ public class OddView extends View {
      * @param progress 0~100
      */
     public void setProgress(float progress, int time) {
+        mIsCW = progress>0;
         mAnimator = ValueAnimator.ofFloat(0, progress);
         mAnimator.setDuration(time);
         mAnimator.setInterpolator(new LinearInterpolator());
