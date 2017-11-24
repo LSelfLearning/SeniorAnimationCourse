@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <declare-styleable name="OddView">
+        <attr name="rightAreaColor" format="color"/>
+        <attr name="middleAreaColor" format="color"/>
+        <attr name="leftAreaColor" format="color"/>
+        <attr name="scaleColor" format="color"/>
+        <attr name="selectedColor" format="color"/>
+        <attr name="scaleMaxLength" format="dimension"/>
+        <attr name="scaleNum" format="integer"/>
+    </declare-styleable>
+</resources>

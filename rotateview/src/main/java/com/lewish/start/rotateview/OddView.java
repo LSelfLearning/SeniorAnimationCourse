@@ -21,12 +21,20 @@ public class OddView extends View {
     private static final String DEFAULT_MIDDLEAREA_COLOR = "#555555";
     private static final String DEFAULT_LEFTAREA_COLOR = "#4a4a4a";
     private static final String DEFAULT_SCALE_COLOR = "#525252";
-    private Context mContext;
+    private static final String DEFAULT_SELECTED_COLOR = "#ffd401";
+    private static final float DEFAULT_SCALE_MAX_LENGTH = 40;
+    private static final int DEFAULT_SCALE_NUM = 9;
+
     private int rightAreaColor;
     private int middleAreaColor;
     private int leftAreaColor;
     private int scaleColor;
+    private int selectedColor;
 
+    private int scaleNum;
+    private float scaleMaxLength;
+
+    private Context mContext;
     private Paint mPaint;
     private Paint mAreaPaint;
     private Paint mScalePaint;
@@ -39,10 +47,8 @@ public class OddView extends View {
     private Path mNumPath;
     private PathMeasure mScalePathMeasure;
     private float[] mScalePos;
-    private float[] mScaleTan;
     private PathMeasure mNumPathMeasure;
     private float[] mNumPos;
-    private float[] mNumTan;
 
     public OddView(Context context) {
         super(context, null);
@@ -65,8 +71,11 @@ public class OddView extends View {
         rightAreaColor = typedArray.getColor(R.styleable.OddView_rightAreaColor, Color.parseColor(DEFAULT_RIGHTAREA_COLOR));
         middleAreaColor = typedArray.getColor(R.styleable.OddView_middleAreaColor, Color.parseColor(DEFAULT_MIDDLEAREA_COLOR));
         leftAreaColor = typedArray.getColor(R.styleable.OddView_leftAreaColor, Color.parseColor(DEFAULT_LEFTAREA_COLOR));
+        selectedColor = typedArray.getColor(R.styleable.OddView_selectedColor, Color.parseColor(DEFAULT_SELECTED_COLOR));
 
         scaleColor = typedArray.getColor(R.styleable.OddView_scaleColor, Color.parseColor(DEFAULT_SCALE_COLOR));
+        scaleNum = typedArray.getInteger(R.styleable.OddView_scaleNum, DEFAULT_SCALE_NUM);
+        scaleMaxLength = typedArray.getDimension(R.styleable.OddView_scaleMaxLength, DEFAULT_SCALE_MAX_LENGTH);
         typedArray.recycle();
     }
 
@@ -91,12 +100,10 @@ public class OddView extends View {
         mScalePath = new Path();
         mScalePathMeasure = new PathMeasure();
         mScalePos = new float[2];
-        mScaleTan = new float[2];
         //数字
         mNumPath = new Path();
         mNumPathMeasure = new PathMeasure();
         mNumPos = new float[2];
-        mNumTan = new float[2];
     }
 
     @Override
@@ -142,14 +149,16 @@ public class OddView extends View {
         canvas.drawPath(mLeftArcPath, mAreaPaint);
 
         //画刻度
+        float initOffset = -0.05f;
         mScalePath.moveTo(middleStartPointX, realHeight);
         mScalePath.quadTo(middleControlPointX, realHeight / 2, middleStartPointX, 0);
         mScalePathMeasure.setPath(mScalePath, false);
-        for (int j = 0; j < 10; j++) {
-            float distance = mScalePathMeasure.getLength() * 0.1f * (j + 1);
-            mScalePathMeasure.getPosTan(distance, mScalePos, mScaleTan);
+        for (int j = 0; j < scaleNum; j++) {
+            float distance = mScalePathMeasure.getLength() * (initOffset + 1f / scaleNum * (j + 1));
+            mScalePathMeasure.getPosTan(distance, mScalePos, null);
             mScalePathMeasure.getSegment(0, distance, mScalePath, true);
-            canvas.drawLine(mScalePos[0], mScalePos[1], mScalePos[0] - (j % 2 == 0 ? 40 : 20), mScalePos[1], mScalePaint);
+            mScalePaint.setColor(j == scaleNum - 2 ? selectedColor : scaleColor);
+            canvas.drawLine(mScalePos[0], mScalePos[1], mScalePos[0] - (j % 2 != 0 ? scaleMaxLength : scaleMaxLength / 2), mScalePos[1], mScalePaint);
         }
 
 //        canvas.drawPath(mLeftArcPath,mPaint);
