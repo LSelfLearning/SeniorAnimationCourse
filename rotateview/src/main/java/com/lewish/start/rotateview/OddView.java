@@ -1,5 +1,6 @@
 package com.lewish.start.rotateview;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -10,6 +11,7 @@ import android.graphics.PathMeasure;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.animation.LinearInterpolator;
 
 /**
  * author: sundong
@@ -33,6 +35,7 @@ public class OddView extends View {
 
     private int scaleNum;
     private float scaleMaxLength;
+    private int[] amountArr = {500, 1000, 1500, 2000, 2500};
 
     private Context mContext;
     private Paint mPaint;
@@ -49,6 +52,9 @@ public class OddView extends View {
     private float[] mScalePos;
     private PathMeasure mNumPathMeasure;
     private float[] mNumPos;
+    private ValueAnimator mAnimator;
+    private float mProgress;
+    private boolean mIsCW;
 
     public OddView(Context context) {
         super(context, null);
@@ -147,19 +153,39 @@ public class OddView extends View {
         mLeftArcPath.close();
         mAreaPaint.setColor(leftAreaColor);
         canvas.drawPath(mLeftArcPath, mAreaPaint);
-
         //画刻度
-        float initOffset = -0.05f;
+        float initOffset = mProgress;
+        mIsCW = initOffset > 0;
+
         mScalePath.moveTo(middleStartPointX, realHeight);
         mScalePath.quadTo(middleControlPointX, realHeight / 2, middleStartPointX, 0);
         mScalePathMeasure.setPath(mScalePath, false);
-        for (int j = 0; j < scaleNum; j++) {
-            float distance = mScalePathMeasure.getLength() * (initOffset + 1f / scaleNum * (j + 1));
-            mScalePathMeasure.getPosTan(distance, mScalePos, null);
-            mScalePathMeasure.getSegment(0, distance, mScalePath, true);
-            mScalePaint.setColor(j == scaleNum - 2 ? selectedColor : scaleColor);
-            canvas.drawLine(mScalePos[0], mScalePos[1], mScalePos[0] - (j % 2 != 0 ? scaleMaxLength : scaleMaxLength / 2), mScalePos[1], mScalePaint);
+        if (mIsCW) {
+            int a = (int) ((1+initOffset) / (1f / scaleNum));
+            for (int i = 0; i < a; i++) {
+                float distance = mScalePathMeasure.getLength() * (1f/ scaleNum * (i + 1)-initOffset);
+                mScalePathMeasure.getPosTan(distance, mScalePos, null);
+                mScalePathMeasure.getSegment(0, distance, mScalePath, true);
+                mScalePaint.setColor(i == scaleNum - 2 ? selectedColor : scaleColor);
+                canvas.drawLine(mScalePos[0], mScalePos[1], mScalePos[0] - (i % 2 != 0 ? scaleMaxLength : scaleMaxLength / 2), mScalePos[1], mScalePaint);
+            }
+        } else {
+            int b = (int) ((1 - initOffset) / (1f / scaleNum));
+            for (int i = 0; i < b; i++) {
+                float distance = mScalePathMeasure.getLength() * (initOffset + 1f / scaleNum * (i + 1));
+                mScalePathMeasure.getPosTan(distance, mScalePos, null);
+                mScalePathMeasure.getSegment(0, distance, mScalePath, true);
+                mScalePaint.setColor(i == scaleNum - 2 ? selectedColor : scaleColor);
+                canvas.drawLine(mScalePos[0], mScalePos[1], mScalePos[0] - (i % 2 != 0 ? scaleMaxLength : scaleMaxLength / 2), mScalePos[1], mScalePaint);
+            }
         }
+//        for (int j = 0; j < scaleNum; j++) {
+//            float distance = mScalePathMeasure.getLength() * (initOffset + 1f / scaleNum * (j + 1));
+//            mScalePathMeasure.getPosTan(distance, mScalePos, null);
+//            mScalePathMeasure.getSegment(0, distance, mScalePath, true);
+//            mScalePaint.setColor(j == scaleNum - 2 ? selectedColor : scaleColor);
+//            canvas.drawLine(mScalePos[0], mScalePos[1], mScalePos[0] - (j % 2 != 0 ? scaleMaxLength : scaleMaxLength / 2), mScalePos[1], mScalePaint);
+//        }
 
 //        canvas.drawPath(mLeftArcPath,mPaint);
 //        for (int i = 0; i < 3; i++) {
@@ -202,5 +228,22 @@ public class OddView extends View {
 //            }
 //        }
 
+    }
+
+    /**
+     * @param progress 0~100
+     */
+    public void setProgress(float progress, int time) {
+        mAnimator = ValueAnimator.ofFloat(0, progress);
+        mAnimator.setDuration(time);
+        mAnimator.setInterpolator(new LinearInterpolator());
+        mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                mProgress = (float) valueAnimator.getAnimatedValue();
+                invalidate();
+            }
+        });
+        mAnimator.start();
     }
 }
