@@ -10,7 +10,9 @@ import android.graphics.Path;
 import android.graphics.PathMeasure;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.animation.LinearInterpolator;
 
 import java.util.List;
@@ -29,6 +31,7 @@ public class OddView extends View {
     private static final String DEFAULT_SELECTED_COLOR = "#ffd401";
     private static final float DEFAULT_SCALELINE_MAX_LENGTH = 40;
     private static final int DEFAULT_SCALE_NUM = 10;
+    private int mTouchSlop;
 
     private int rightAreaColor;
     private int middleAreaColor;
@@ -56,8 +59,10 @@ public class OddView extends View {
     private PathMeasure mNumPathMeasure;
     private float[] mNumPos;
     private ValueAnimator mAnimator;
-    private float mProgress;
+    private float mOffset;
     private boolean mIsCW;
+    private int realWidth;
+    private int realHeight;
 
     public OddView(Context context) {
         super(context, null);
@@ -70,6 +75,8 @@ public class OddView extends View {
     public OddView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         mContext = context;
+        ViewConfiguration configuration = ViewConfiguration.get(getContext());
+        mTouchSlop = configuration.getScaledTouchSlop();
         loadAttributeSet(context, attrs, defStyleAttr);
         initVariables();
     }
@@ -117,8 +124,8 @@ public class OddView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        int realWidth = getWidth() - getPaddingLeft() - getPaddingRight();
-        int realHeight = getHeight() - getPaddingTop() - getPaddingBottom();
+        realWidth = getWidth() - getPaddingLeft() - getPaddingRight();
+        realHeight = getHeight() - getPaddingTop() - getPaddingBottom();
         int controlPointOffset = -250;
         int rightArcOffset = -50;
         int middleArcOffset = -150;
@@ -158,7 +165,8 @@ public class OddView extends View {
         canvas.drawPath(mLeftArcPath, mAreaPaint);
 
         //画刻度
-        float initOffset = mProgress;
+        float initOffset = mOffset;
+        mIsCW = mOffset > 0;
         mScalePath.moveTo(middleStartPointX, realHeight);
         mScalePath.quadTo(middleControlPointX, realHeight / 2, middleStartPointX, 0);
         mScalePathMeasure.setPath(mScalePath, false);
@@ -185,20 +193,52 @@ public class OddView extends View {
     }
 
     /**
-     * @param progress 0~100
+     * @param offset 0~100
      */
-    public void setProgress(float progress, int time) {
-        mIsCW = progress > 0;
-        mAnimator = ValueAnimator.ofFloat(0, progress);
+    public void setOffset(float offset, int time) {
+        mIsCW = offset > 0;
+        mAnimator = ValueAnimator.ofFloat(0, offset);
         mAnimator.setDuration(time);
         mAnimator.setInterpolator(new LinearInterpolator());
         mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                mProgress = (float) valueAnimator.getAnimatedValue();
+                mOffset = (float) valueAnimator.getAnimatedValue();
                 invalidate();
             }
         });
         mAnimator.start();
+    }
+
+    float mLastX, mLastY;
+    private float downX, downY;
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        super.onTouchEvent(event);
+        float x = event.getRawX();
+        float y = event.getRawY();
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                downX = x;
+                downY = y;
+                break;
+            case MotionEvent.ACTION_MOVE:
+                float deltaX = downX - x;
+                float deltaY = downY - y;
+                boolean isScrollY = Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > mTouchSlop;
+                if (isScrollY) {
+                    //Y方向上的移动
+                    mOffset = deltaY / realHeight;
+                    invalidate();
+                }
+                break;
+            case MotionEvent.ACTION_CANCEL:
+            case MotionEvent.ACTION_UP:
+                break;
+        }
+        mLastX = x;
+        mLastY = y;
+        return true;
     }
 }
