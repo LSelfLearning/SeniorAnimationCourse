@@ -17,8 +17,6 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.animation.LinearInterpolator;
 
-import java.util.List;
-
 /**
  * author: sundong
  * created at 2017/11/23 20:29
@@ -26,12 +24,14 @@ import java.util.List;
 
 public class OddView extends View {
     private static final String TAG = "OddView";
+    //颜色相关常量
     private static final String DEFAULT_RIGHTAREA_COLOR = "#4f4f4f";
     private static final String DEFAULT_MIDDLEAREA_COLOR = "#555555";
     private static final String DEFAULT_LEFTAREA_COLOR = "#4a4a4a";
     private static final String DEFAULT_SCALE_COLOR = "#525252";
     private static final String DEFAULT_NUM_COLOR = "#BABABA";
     private static final String DEFAULT_SELECTED_COLOR = "#ffd401";
+    //属性配置相关常量
     private static final float DEFAULT_SCALELINE_MAX_LENGTH = 40;
     private static final int DEFAULT_SCALE_NUM = 10;
     //贝塞尔曲线相关常量
@@ -40,41 +40,42 @@ public class OddView extends View {
     public static final int MIDDLE_BEZIER_REL_OFFSET = -150;
     public static final int LEFT_BEZIER_REL_OFFSET = -200;
 
-    private int mTouchSlop;
+    private Context mContext;
 
+    private int mTouchSlop;//滑动阈值
+    //颜色
     private int rightAreaColor;
     private int middleAreaColor;
     private int leftAreaColor;
     private int scaleColor;
     private int textColor;
     private int selectedColor;
-
-    private int scaleNum;//一屏有多少刻度
-    private float scaleLineMaxLength;
-    private int[] amountArr = {500, 1000, 1500, 2000, 2500};
-    private List amountList;
-    private Context mContext;
+    //Paint
     private Paint mAreaPaint;
     private Paint mScalePaint;
     private Paint mTxtPaint;
-
+    //Path
     private Path mRightArcPath;
     private Path mMiddleArcPath;
     private Path mLeftArcPath;
-
     private Path mScalePath;
-    private Path mNumPath;
     private PathMeasure mScalePathMeasure;
     private float[] mScalePos;
-    private PathMeasure mNumPathMeasure;
-    private float[] mNumPos;
-    private ValueAnimator mAnimator;
-    private float mOffset;
-    private boolean mIsCW;
+    private Rect mTxtMeasureRect;
+    //参数配置
+    private float mTxtFontSize;
+    private int scaleNum;//一屏有多少刻度
+    private float scaleLineMaxLength;
+    private int[] amountArr = {500, 1000, 1500, 2000, 2500};
+    //逻辑需要
     private int realWidth;
     private int realHeight;
-    private float mTxtFontSize;
-    private Rect mTxtMeasureRect;
+    private float mOffset;
+    private boolean mIsCW;
+
+    private amountSelectedListener amountSelectedListener;
+    //调试用
+    private ValueAnimator mAnimator;
 
     public OddView(Context context) {
         super(context, null);
@@ -87,8 +88,7 @@ public class OddView extends View {
     public OddView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         mContext = context;
-        ViewConfiguration configuration = ViewConfiguration.get(getContext());
-        mTouchSlop = configuration.getScaledTouchSlop();
+        mTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
         loadAttributeSet(context, attrs, defStyleAttr);
         initVariables();
     }
@@ -135,10 +135,6 @@ public class OddView extends View {
         mScalePath = new Path();
         mScalePathMeasure = new PathMeasure();
         mScalePos = new float[2];
-        //数字
-        mNumPath = new Path();
-        mNumPathMeasure = new PathMeasure();
-        mNumPos = new float[2];
 
         mTxtMeasureRect = new Rect();
     }
@@ -173,14 +169,14 @@ public class OddView extends View {
 
             mScalePaint.setColor(i % 2 == 0 ? Color.GREEN : Color.RED);
             if (i % 2 == 0) {
-                scaleLineLength = scaleLineMaxLength;
-            } else {
                 scaleLineLength = scaleLineMaxLength / 2;
+            } else {
+                scaleLineLength = scaleLineMaxLength;
                 String text = i > 6 ? "500" : "2000";
                 mTxtPaint.getTextBounds(text, 0, text.length(), mTxtMeasureRect);
-                float txtWidth = mTxtMeasureRect.width();
-                float txtHeight = mTxtMeasureRect.height();
-                canvas.drawText(text, mScalePos[0] - txtWidth - 2*scaleLineMaxLength, mScalePos[1] + txtHeight / 2f, mTxtPaint);
+                if ((mScalePos[1] >= 0 + perArcLength) && (mScalePos[1] <= realHeight - perArcLength)) {
+                    canvas.drawText(text, mScalePos[0] - mTxtMeasureRect.width() - 2 * scaleLineMaxLength, mScalePos[1] + mTxtMeasureRect.height() / 2f, mTxtPaint);
+                }
             }
             canvas.drawLine(mScalePos[0], mScalePos[1], mScalePos[0] - scaleLineLength, mScalePos[1], mScalePaint);
         }
@@ -273,5 +269,13 @@ public class OddView extends View {
         mLastX = x;
         mLastY = y;
         return true;
+    }
+
+    interface amountSelectedListener {
+        void onAmountSelected(String amount);
+    }
+
+    public void setAmountSelectedListener(amountSelectedListener amountSelectedListener) {
+        this.amountSelectedListener = amountSelectedListener;
     }
 }
