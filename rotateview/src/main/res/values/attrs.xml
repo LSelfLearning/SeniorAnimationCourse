@@ -5,8 +5,10 @@
         <attr name="middleAreaColor" format="color"/>
         <attr name="leftAreaColor" format="color"/>
         <attr name="scaleColor" format="color"/>
+        <attr name="numColor" format="color"/>
         <attr name="selectedColor" format="color"/>
         <attr name="scaleLineMaxLength" format="dimension"/>
         <attr name="scaleNum" format="integer"/>
+        <attr name="txtFontSize" format="dimension"/>
     </declare-styleable>
 </resources>

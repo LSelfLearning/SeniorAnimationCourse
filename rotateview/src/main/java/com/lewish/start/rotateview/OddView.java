@@ -8,6 +8,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PathMeasure;
+import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -28,6 +30,7 @@ public class OddView extends View {
     private static final String DEFAULT_MIDDLEAREA_COLOR = "#555555";
     private static final String DEFAULT_LEFTAREA_COLOR = "#4a4a4a";
     private static final String DEFAULT_SCALE_COLOR = "#525252";
+    private static final String DEFAULT_NUM_COLOR = "#BABABA";
     private static final String DEFAULT_SELECTED_COLOR = "#ffd401";
     private static final float DEFAULT_SCALELINE_MAX_LENGTH = 40;
     private static final int DEFAULT_SCALE_NUM = 10;
@@ -43,6 +46,7 @@ public class OddView extends View {
     private int middleAreaColor;
     private int leftAreaColor;
     private int scaleColor;
+    private int textColor;
     private int selectedColor;
 
     private int scaleNum;//一屏有多少刻度
@@ -50,9 +54,9 @@ public class OddView extends View {
     private int[] amountArr = {500, 1000, 1500, 2000, 2500};
     private List amountList;
     private Context mContext;
-    private Paint mPaint;
     private Paint mAreaPaint;
     private Paint mScalePaint;
+    private Paint mTxtPaint;
 
     private Path mRightArcPath;
     private Path mMiddleArcPath;
@@ -69,6 +73,8 @@ public class OddView extends View {
     private boolean mIsCW;
     private int realWidth;
     private int realHeight;
+    private float mTxtFontSize;
+    private Rect mTxtMeasureRect;
 
     public OddView(Context context) {
         super(context, null);
@@ -96,16 +102,14 @@ public class OddView extends View {
         selectedColor = typedArray.getColor(R.styleable.OddView_selectedColor, Color.parseColor(DEFAULT_SELECTED_COLOR));
 
         scaleColor = typedArray.getColor(R.styleable.OddView_scaleColor, Color.parseColor(DEFAULT_SCALE_COLOR));
+        textColor = typedArray.getColor(R.styleable.OddView_numColor, Color.parseColor(DEFAULT_NUM_COLOR));
         scaleNum = typedArray.getInteger(R.styleable.OddView_scaleNum, DEFAULT_SCALE_NUM);
         scaleLineMaxLength = typedArray.getDimension(R.styleable.OddView_scaleLineMaxLength, DEFAULT_SCALELINE_MAX_LENGTH);
+        mTxtFontSize = typedArray.getDimension(R.styleable.OddView_txtFontSize, 40);
         typedArray.recycle();
     }
 
     private void initVariables() {
-        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mPaint.setStyle(Paint.Style.STROKE);
-        mPaint.setStrokeWidth(5);
-
         mAreaPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mAreaPaint.setStyle(Paint.Style.FILL);
         mAreaPaint.setStrokeWidth(5);
@@ -114,6 +118,15 @@ public class OddView extends View {
         mScalePaint.setStyle(Paint.Style.STROKE);
         mScalePaint.setColor(scaleColor);
         mScalePaint.setStrokeWidth(5);
+
+        mTxtPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mTxtPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        mTxtPaint.setTextSize(mTxtFontSize);
+        mTxtPaint.setTextAlign(Paint.Align.LEFT);
+        mTxtPaint.setColor(textColor);
+        mTxtPaint.setTypeface(Typeface.DEFAULT);
+        mTxtPaint.setStrokeWidth(2);
+
         //Arc
         mRightArcPath = new Path();
         mMiddleArcPath = new Path();
@@ -126,6 +139,8 @@ public class OddView extends View {
         mNumPath = new Path();
         mNumPathMeasure = new PathMeasure();
         mNumPos = new float[2];
+
+        mTxtMeasureRect = new Rect();
     }
 
     @Override
@@ -136,17 +151,17 @@ public class OddView extends View {
         //画刻度
         int scaleBezierStartX = realWidth + RIGHT_BEZIER_OFFSET + MIDDLE_BEZIER_REL_OFFSET;
         int scaleBezierControlX = realWidth + RIGHT_BEZIER_CONTROL_POINT_OFFSET + MIDDLE_BEZIER_REL_OFFSET;
-        float initOffset = mOffset;
         mIsCW = mOffset > 0;
         mScalePath.moveTo(scaleBezierStartX, realHeight);
         mScalePath.quadTo(scaleBezierControlX, realHeight / 2, scaleBezierStartX, 0);
         mScalePathMeasure.setPath(mScalePath, false);
         float perArcPercent = 1f / (scaleNum - 1);//每一段所占屏幕百分比
         float perArcLength = mScalePathMeasure.getLength() * perArcPercent;//每一段的弧长
-        float moveDistance = mScalePathMeasure.getLength() * initOffset;//要移动的距离
+        float moveDistance = mScalePathMeasure.getLength() * mOffset;//要移动的距离
         int lineCount = scaleNum * 2;
         for (int i = 0; i < lineCount; i++) {
             float linePos;//刻度线在曲线弧中的位置
+            float scaleLineLength;
             if (mIsCW) {
                 linePos = perArcLength * (scaleNum - i);
             } else {
@@ -157,8 +172,16 @@ public class OddView extends View {
             mScalePathMeasure.getSegment(0, movingPos, mScalePath, true);
 
             mScalePaint.setColor(i % 2 == 0 ? Color.GREEN : Color.RED);
-
-            float scaleLineLength = i % 2 == 0 ? scaleLineMaxLength : scaleLineMaxLength / 2;
+            if (i % 2 == 0) {
+                scaleLineLength = scaleLineMaxLength;
+            } else {
+                scaleLineLength = scaleLineMaxLength / 2;
+                String text = i > 6 ? "500" : "2000";
+                mTxtPaint.getTextBounds(text, 0, text.length(), mTxtMeasureRect);
+                float txtWidth = mTxtMeasureRect.width();
+                float txtHeight = mTxtMeasureRect.height();
+                canvas.drawText(text, mScalePos[0] - txtWidth - 2*scaleLineMaxLength, mScalePos[1] + txtHeight / 2f, mTxtPaint);
+            }
             canvas.drawLine(mScalePos[0], mScalePos[1], mScalePos[0] - scaleLineLength, mScalePos[1], mScalePaint);
         }
     }
