@@ -12,6 +12,7 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -72,10 +73,14 @@ public class OddView extends View {
     private int realHeight;
     private float mOffset;
     private boolean mIsCW;
-
+    private int topLineIndex;
+    private int bottomLineIndex;
     private amountSelectedListener amountSelectedListener;
     //调试用
     private ValueAnimator mAnimator;
+    //交互相关
+    float mLastX, mLastY;
+    private float downX, downY;
 
     public OddView(Context context) {
         super(context, null);
@@ -154,19 +159,40 @@ public class OddView extends View {
         float perArcPercent = 1f / (scaleNum - 1);//每一段所占屏幕百分比
         float perArcLength = mScalePathMeasure.getLength() * perArcPercent;//每一段的弧长
         float moveDistance = mScalePathMeasure.getLength() * mOffset;//要移动的距离
-        int lineCount = scaleNum * 2;
+        int lineCount = scaleNum * 30;
+        float scaleLineLength;//刻度线长度
+        float movingPos;//要移动的位置
+        float movingNextPos;
+        float linePos;//刻度线在曲线弧中的位置
+        float nextLinePos;
         for (int i = 0; i < lineCount; i++) {
-            float linePos;//刻度线在曲线弧中的位置
-            float scaleLineLength;
             if (mIsCW) {
+                //顺时针转->从上向下画
                 linePos = perArcLength * (scaleNum - i);
+                nextLinePos = perArcLength * (scaleNum - i + 1);
             } else {
+                //逆时针转->从下向上画
                 linePos = perArcLength * i;
+                nextLinePos = perArcLength * (i - 1);
             }
-            float movingPos = linePos + moveDistance;
+            movingPos = linePos + moveDistance;
+            movingNextPos = nextLinePos + moveDistance;
+            if(mIsCW) {
+                if (movingPos < mScalePathMeasure.getLength() && movingNextPos >= mScalePathMeasure.getLength()) {
+                    topLineIndex = i;
+                    bottomLineIndex = topLineIndex + 7;
+                    Log.d(TAG, "顺时针 topLineIndex=" + topLineIndex + "bottomLineIndex=" + bottomLineIndex);
+                }
+            }else {
+                if(movingPos>0&&movingNextPos<=0) {
+                    bottomLineIndex = i;
+                    topLineIndex = bottomLineIndex + 7;
+                    Log.d(TAG, "逆时针 topLineIndex=" + topLineIndex + "bottomLineIndex=" + bottomLineIndex);
+                }
+            }
+
             mScalePathMeasure.getPosTan(movingPos, mScalePos, null);
             mScalePathMeasure.getSegment(0, movingPos, mScalePath, true);
-
             mScalePaint.setColor(i % 2 == 0 ? Color.GREEN : Color.RED);
             if (i % 2 == 0) {
                 scaleLineLength = scaleLineMaxLength / 2;
@@ -182,6 +208,13 @@ public class OddView extends View {
         }
     }
 
+    private void drawTxt(){
+
+    }
+
+    private void drawLine(){
+
+    }
     /**
      * 画弧形区域
      */
@@ -239,8 +272,6 @@ public class OddView extends View {
         mAnimator.start();
     }
 
-    float mLastX, mLastY;
-    private float downX, downY;
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
