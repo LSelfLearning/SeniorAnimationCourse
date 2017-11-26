@@ -6,7 +6,7 @@
         <attr name="leftAreaColor" format="color"/>
         <attr name="scaleColor" format="color"/>
         <attr name="selectedColor" format="color"/>
-        <attr name="scaleMaxLength" format="dimension"/>
+        <attr name="scaleLineMaxLength" format="dimension"/>
         <attr name="scaleNum" format="integer"/>
     </declare-styleable>
 </resources>

@@ -27,7 +27,7 @@ public class OddView extends View {
     private static final String DEFAULT_LEFTAREA_COLOR = "#4a4a4a";
     private static final String DEFAULT_SCALE_COLOR = "#525252";
     private static final String DEFAULT_SELECTED_COLOR = "#ffd401";
-    private static final float DEFAULT_SCALE_MAX_LENGTH = 40;
+    private static final float DEFAULT_SCALELINE_MAX_LENGTH = 40;
     private static final int DEFAULT_SCALE_NUM = 10;
 
     private int rightAreaColor;
@@ -37,7 +37,7 @@ public class OddView extends View {
     private int selectedColor;
 
     private int scaleNum;//一屏有多少刻度
-    private float scaleMaxLength;
+    private float scaleLineMaxLength;
     private int[] amountArr = {500, 1000, 1500, 2000, 2500};
     private List amountList;
     private Context mContext;
@@ -84,7 +84,7 @@ public class OddView extends View {
 
         scaleColor = typedArray.getColor(R.styleable.OddView_scaleColor, Color.parseColor(DEFAULT_SCALE_COLOR));
         scaleNum = typedArray.getInteger(R.styleable.OddView_scaleNum, DEFAULT_SCALE_NUM);
-        scaleMaxLength = typedArray.getDimension(R.styleable.OddView_scaleMaxLength, DEFAULT_SCALE_MAX_LENGTH);
+        scaleLineMaxLength = typedArray.getDimension(R.styleable.OddView_scaleLineMaxLength, DEFAULT_SCALELINE_MAX_LENGTH);
         typedArray.recycle();
     }
 
@@ -156,44 +156,31 @@ public class OddView extends View {
         mLeftArcPath.close();
         mAreaPaint.setColor(leftAreaColor);
         canvas.drawPath(mLeftArcPath, mAreaPaint);
+
         //画刻度
         float initOffset = mProgress;
-
-
         mScalePath.moveTo(middleStartPointX, realHeight);
         mScalePath.quadTo(middleControlPointX, realHeight / 2, middleStartPointX, 0);
         mScalePathMeasure.setPath(mScalePath, false);
-        float perPercent = 1f / (scaleNum - 1);//每一段所占屏幕百分比
-        float perDistance = mScalePathMeasure.getLength() * perPercent;
-        float moveDistance = mScalePathMeasure.getLength() * initOffset;
+        float perArcPercent = 1f / (scaleNum - 1);//每一段所占屏幕百分比
+        float perArcLength = mScalePathMeasure.getLength() * perArcPercent;//每一段的弧长
+        float moveDistance = mScalePathMeasure.getLength() * initOffset;//要移动的距离
         int lineCount = scaleNum * 2;
-        if (mIsCW) {
-            for (int i = 0; i < lineCount; i++) {
-                float linePos = perDistance * (scaleNum - i);
-                float movingPos = linePos + moveDistance;
-
-                mScalePathMeasure.getPosTan(movingPos, mScalePos, null);
-                mScalePathMeasure.getSegment(0, movingPos, mScalePath, true);
-
-                mScalePaint.setColor(i % 2 == 0 ? Color.GREEN : Color.RED);
-
-                float lineLength = i % 2 == 0 ? scaleMaxLength : scaleMaxLength / 2;
-                canvas.drawLine(mScalePos[0], mScalePos[1], mScalePos[0] - lineLength, mScalePos[1], mScalePaint);
-
+        for (int i = 0; i < lineCount; i++) {
+            float linePos;//刻度线在曲线弧中的位置
+            if (mIsCW) {
+                linePos = perArcLength * (scaleNum - i);
+            } else {
+                linePos = perArcLength * i;
             }
-        } else {
-            for (int i = 0; i < lineCount; i++) {
-                float linePos = perDistance * i;
-                float movingPos = linePos + moveDistance;
+            float movingPos = linePos + moveDistance;
+            mScalePathMeasure.getPosTan(movingPos, mScalePos, null);
+            mScalePathMeasure.getSegment(0, movingPos, mScalePath, true);
 
-                mScalePathMeasure.getPosTan(movingPos, mScalePos, null);
-                mScalePathMeasure.getSegment(0, movingPos, mScalePath, true);
+            mScalePaint.setColor(i % 2 == 0 ? Color.GREEN : Color.RED);
 
-                mScalePaint.setColor(i % 2 == 0 ? Color.GREEN : Color.RED);
-
-                float lineLength = i % 2 == 0 ? scaleMaxLength : scaleMaxLength / 2;
-                canvas.drawLine(mScalePos[0], mScalePos[1], mScalePos[0] - lineLength, mScalePos[1], mScalePaint);
-            }
+            float scaleLineLength = i % 2 == 0 ? scaleLineMaxLength : scaleLineMaxLength / 2;
+            canvas.drawLine(mScalePos[0], mScalePos[1], mScalePos[0] - scaleLineLength, mScalePos[1], mScalePaint);
         }
     }
 
