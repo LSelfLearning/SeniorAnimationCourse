@@ -31,6 +31,12 @@ public class OddView extends View {
     private static final String DEFAULT_SELECTED_COLOR = "#ffd401";
     private static final float DEFAULT_SCALELINE_MAX_LENGTH = 40;
     private static final int DEFAULT_SCALE_NUM = 10;
+    //贝塞尔曲线相关常量
+    private static final int RIGHT_BEZIER_CONTROL_POINT_OFFSET = -250;
+    public static final int RIGHT_BEZIER_OFFSET = -50;
+    public static final int MIDDLE_BEZIER_REL_OFFSET = -150;
+    public static final int LEFT_BEZIER_REL_OFFSET = -200;
+
     private int mTouchSlop;
 
     private int rightAreaColor;
@@ -126,49 +132,14 @@ public class OddView extends View {
     protected void onDraw(Canvas canvas) {
         realWidth = getWidth() - getPaddingLeft() - getPaddingRight();
         realHeight = getHeight() - getPaddingTop() - getPaddingBottom();
-        int controlPointOffset = -250;
-        int rightArcOffset = -50;
-        int middleArcOffset = -150;
-        int leftArcOffset = -200;
-        //画最右边的
-        int rightStartPointX = realWidth + rightArcOffset;
-        int rightControlPointX = realWidth + controlPointOffset;
-        mRightArcPath.moveTo(rightStartPointX, realHeight);
-        mRightArcPath.lineTo(realWidth, realHeight);
-        mRightArcPath.lineTo(realWidth, 0);
-        mRightArcPath.lineTo(rightStartPointX, 0);
-        mRightArcPath.quadTo(rightControlPointX, realHeight / 2, rightStartPointX, realHeight);
-        mRightArcPath.close();
-        mAreaPaint.setColor(rightAreaColor);
-        canvas.drawPath(mRightArcPath, mAreaPaint);
-        //画中间的
-        int middleStartPointX = rightStartPointX + middleArcOffset;
-        int middleControlPointX = rightControlPointX + middleArcOffset;
-        mMiddleArcPath.moveTo(middleStartPointX, realHeight);
-        mMiddleArcPath.lineTo(rightStartPointX, realHeight);
-        mMiddleArcPath.quadTo(rightControlPointX, realHeight / 2, rightStartPointX, 0);
-        mMiddleArcPath.lineTo(middleStartPointX, 0);
-        mMiddleArcPath.quadTo(middleControlPointX, realHeight / 2, middleStartPointX, realHeight);
-        mMiddleArcPath.close();
-        mAreaPaint.setColor(middleAreaColor);
-        canvas.drawPath(mMiddleArcPath, mAreaPaint);
-        //画最左边的
-        int leftStartPointX = middleStartPointX + leftArcOffset;
-        int leftControlPointX = middleControlPointX + leftArcOffset;
-        mLeftArcPath.moveTo(leftStartPointX, realHeight);
-        mLeftArcPath.lineTo(middleStartPointX, realHeight);
-        mLeftArcPath.quadTo(middleControlPointX, realHeight / 2, middleStartPointX, 0);
-        mLeftArcPath.lineTo(leftStartPointX, 0);
-        mLeftArcPath.quadTo(leftControlPointX, realHeight / 2, leftStartPointX, realHeight);
-        mLeftArcPath.close();
-        mAreaPaint.setColor(leftAreaColor);
-        canvas.drawPath(mLeftArcPath, mAreaPaint);
-
+        drawArcArea(canvas);
         //画刻度
+        int scaleBezierStartX = realWidth + RIGHT_BEZIER_OFFSET + MIDDLE_BEZIER_REL_OFFSET;
+        int scaleBezierControlX = realWidth + RIGHT_BEZIER_CONTROL_POINT_OFFSET + MIDDLE_BEZIER_REL_OFFSET;
         float initOffset = mOffset;
         mIsCW = mOffset > 0;
-        mScalePath.moveTo(middleStartPointX, realHeight);
-        mScalePath.quadTo(middleControlPointX, realHeight / 2, middleStartPointX, 0);
+        mScalePath.moveTo(scaleBezierStartX, realHeight);
+        mScalePath.quadTo(scaleBezierControlX, realHeight / 2, scaleBezierStartX, 0);
         mScalePathMeasure.setPath(mScalePath, false);
         float perArcPercent = 1f / (scaleNum - 1);//每一段所占屏幕百分比
         float perArcLength = mScalePathMeasure.getLength() * perArcPercent;//每一段的弧长
@@ -190,6 +161,45 @@ public class OddView extends View {
             float scaleLineLength = i % 2 == 0 ? scaleLineMaxLength : scaleLineMaxLength / 2;
             canvas.drawLine(mScalePos[0], mScalePos[1], mScalePos[0] - scaleLineLength, mScalePos[1], mScalePaint);
         }
+    }
+
+    /**
+     * 画弧形区域
+     */
+    private void drawArcArea(Canvas canvas) {
+        //画最右边的
+        int rightStartPointX = realWidth + RIGHT_BEZIER_OFFSET;
+        int rightControlPointX = realWidth + RIGHT_BEZIER_CONTROL_POINT_OFFSET;
+        mRightArcPath.moveTo(rightStartPointX, realHeight);
+        mRightArcPath.lineTo(realWidth, realHeight);
+        mRightArcPath.lineTo(realWidth, 0);
+        mRightArcPath.lineTo(rightStartPointX, 0);
+        mRightArcPath.quadTo(rightControlPointX, realHeight / 2, rightStartPointX, realHeight);
+        mRightArcPath.close();
+        mAreaPaint.setColor(rightAreaColor);
+        canvas.drawPath(mRightArcPath, mAreaPaint);
+        //画中间的
+        int middleStartPointX = rightStartPointX + MIDDLE_BEZIER_REL_OFFSET;
+        int middleControlPointX = rightControlPointX + MIDDLE_BEZIER_REL_OFFSET;
+        mMiddleArcPath.moveTo(middleStartPointX, realHeight);
+        mMiddleArcPath.lineTo(rightStartPointX, realHeight);
+        mMiddleArcPath.quadTo(rightControlPointX, realHeight / 2, rightStartPointX, 0);
+        mMiddleArcPath.lineTo(middleStartPointX, 0);
+        mMiddleArcPath.quadTo(middleControlPointX, realHeight / 2, middleStartPointX, realHeight);
+        mMiddleArcPath.close();
+        mAreaPaint.setColor(middleAreaColor);
+        canvas.drawPath(mMiddleArcPath, mAreaPaint);
+        //画最左边的
+        int leftStartPointX = middleStartPointX + LEFT_BEZIER_REL_OFFSET;
+        int leftControlPointX = middleControlPointX + LEFT_BEZIER_REL_OFFSET;
+        mLeftArcPath.moveTo(leftStartPointX, realHeight);
+        mLeftArcPath.lineTo(middleStartPointX, realHeight);
+        mLeftArcPath.quadTo(middleControlPointX, realHeight / 2, middleStartPointX, 0);
+        mLeftArcPath.lineTo(leftStartPointX, 0);
+        mLeftArcPath.quadTo(leftControlPointX, realHeight / 2, leftStartPointX, realHeight);
+        mLeftArcPath.close();
+        mAreaPaint.setColor(leftAreaColor);
+        canvas.drawPath(mLeftArcPath, mAreaPaint);
     }
 
     /**
